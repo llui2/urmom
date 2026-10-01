@@ -1,4 +1,5 @@
 \documentclass[tikz,border=3pt]{standalone}
+
 \usepackage[T1]{fontenc}
 \usepackage{newtxtext,newtxmath}
 \let\Bbbk\relax
@@ -12,106 +13,103 @@
   line cap=round,
   line join=round,
   every node/.style={font=\small},
+  response/.style={circle,fill,inner sep=1.25pt},
   target/.style={circle,draw,fill=white,inner sep=1.55pt},
-  state/.style={circle,fill,inner sep=1.25pt},
   hull/.style={thick},
   guide/.style={densely dashed},
-  velocity/.style={->,thick}
+  velocity/.style={-{Latex[length=2mm,width=1.35mm]},line width=0.7pt}
 ]
 
-\node at (1.55,3.45) {broad support};
-\node at (6.35,3.45) {specialized support};
+\node at (1.53,3.28) {broad support};
+\node at (5.73,3.28) {specialized support};
 
 % ------------------------------------------------------------------
 % Broad support
 % ------------------------------------------------------------------
 \begin{scope}[xshift=0cm]
-  \coordinate (A1) at (0,0.4);
-  \coordinate (A2) at (1.8,0.2);
-  \coordinate (A3) at (2.8,0.8);
-  \coordinate (A4) at (2.8,2.1);
-  \coordinate (A5) at (1.0,2.35);
-  \coordinate (A6) at (0.1,1.3);
+  \coordinate (A1) at (0,0.45);
+  \coordinate (A2) at (1.85,0.18);
+  \coordinate (A3) at (3.05,1.00);
+  \coordinate (A4) at (2.62,2.38);
+  \coordinate (A5) at (0.98,2.38);
+  \coordinate (A6) at (0.12,1.34);
 
   \draw[hull] (A1)--(A2)--(A3)--(A4)--(A5)--(A6)--cycle;
   \foreach \P in {A1,A2,A3,A4,A5,A6}
-    \fill (\P) circle (1.8pt);
+    \fill (\P) circle (1.25pt);
 
-  \node at (0.73,1.67) {$\mathcal R$};
+  \node at (0.82,1.70) {$\mathcal R$};
 
-  \coordinate (r) at (1.42,1.19);
-  \coordinate (yp) at (0.62,1.19);
+  \coordinate (r) at (1.55,1.30);
+  \coordinate (y) at (1.55,0.57);
 
-  \draw[rotate around={11:(r)},thick]
-    (r) ellipse [x radius=0.78,y radius=0.52];
-  \node[anchor=south west] at (1.90,1.63) {$\mathbf C$};
+  \draw[thick] (r) ellipse [x radius=0.63,y radius=0.50];
+  \node[anchor=south west] at (2.02,1.71) {$\mathbf C$};
 
-  \draw[guide] (r)--(yp);
-  \node[target] at (yp) {};
-  \node[anchor=north] at ($(yp)+(0,-0.09)$) {$\mathbf y^+$};
+  \draw[guide] (r)--(y);
+  \node[target] at (y) {};
+  \node[anchor=north] at ($(y)+(0,-0.10)$) {$\mathbf y^+$};
 
-  \draw[velocity] (r)--++(-0.78,-0.08);
+  \draw[velocity] (r)--++(0,-0.62);
+  \node[response] at (r) {};
+  \node[anchor=south] at ($(r)+(0,0.10)$) {$\mathbf r$};
 
-  \node[state] at (r) {};
-  \node[anchor=south] at ($(r)+(0,0.09)$) {$\mathbf r$};
-
-  \draw[->] (2.95,1.18)--++(0.58,0);
-  \node[anchor=west] at (3.55,1.18) {$\mathbf n$};
+  \draw[->] (3.22,1.15)--++(0,0.68);
+  \node[anchor=west] at (3.25,1.83) {$\mathbf n$};
 \end{scope}
 
 % ------------------------------------------------------------------
 % Specialized support
 % ------------------------------------------------------------------
-\begin{scope}[xshift=4.80cm]
-  \coordinate (B1) at (0,0.4);
-  \coordinate (B2) at (1.8,0.2);
-  \coordinate (B3) at (2.8,0.8);
-  \coordinate (B4) at (2.8,2.1);
-  \coordinate (B5) at (1.0,2.35);
-  \coordinate (B6) at (0.1,1.3);
+\begin{scope}[xshift=4.20cm]
+  \coordinate (B1) at (0,0.45);
+  \coordinate (B2) at (1.85,0.18);
+  \coordinate (B3) at (3.05,1.00);
+  \coordinate (B4) at (2.62,2.38);
+  \coordinate (B5) at (0.98,2.38);
+  \coordinate (B6) at (0.12,1.34);
 
   \draw[hull] (B1)--(B2)--(B3)--(B4)--(B5)--(B6)--cycle;
-  \fill (B1) circle (0.4pt);
-  \fill (B2) circle (0.4pt);
-  \fill (B3) circle (3.0pt);
-  \fill (B4) circle (3.0pt);
-  \fill (B5) circle (0.6pt);
-  \fill (B6) circle (0.6pt);
+  \fill (B1) circle (0.50pt);
+  \fill (B2) circle (0.50pt);
+  \fill (B3) circle (0.60pt);
+  \fill (B4) circle (2.35pt);
+  \fill (B5) circle (2.35pt);
+  \fill (B6) circle (0.60pt);
 
-  \node at (0.73,1.67) {$\mathcal R$};
+  \node at (0.82,1.70) {$\mathcal R$};
 
-  \draw[line width=1.3pt] (B3)--(B4);
-  \node[anchor=west] at (2.90,1.72) {$F$};
+  \draw[line width=1.4pt] (B5)--(B4);
+  \node[anchor=south] at (1.18,2.48) {$F$};
 
-  \coordinate (r) at (2.73,1.45);
-  \coordinate (yp) at (1.93,1.45);
+  \coordinate (r) at (1.78,2.08);
+  \coordinate (y) at (1.78,1.35);
 
-  \draw[thick] (r) ellipse [x radius=0.18,y radius=0.62];
-  \node[anchor=south east] at (2.58,2.01) {$\mathbf C$};
+  \draw[thick] (r) ellipse [x radius=0.63,y radius=0.14];
+  \node[anchor=south west] at (2.20,2.18) {$\mathbf C$};
 
-  \draw[guide] (r)--(yp);
-  \node[target] at (yp) {};
-  \node[anchor=north] at ($(yp)+(0,-0.09)$) {$\mathbf y^+$};
+  \draw[guide] (r)--(y);
+  \node[target] at (y) {};
+  \node[anchor=north] at ($(y)+(0,-0.10)$) {$\mathbf y^+$};
 
-  \draw[velocity] (r)--++(-0.22,0);
+  \draw[velocity] (r)--++(0,-0.20);
+  \node[response] at (r) {};
+  \node[anchor=south] at ($(r)+(0,0.10)$) {$\mathbf r$};
 
-  \node[state] at (r) {};
-  \node[anchor=south east] at ($(r)+(-0.08,0.08)$) {$\mathbf r$};
-
-  \draw[->] (2.96,1.18)--++(0.58,0);
-  \node[anchor=west] at (3.56,1.18) {$\mathbf n$};
+  \draw[->] (3.22,1.15)--++(0,0.68);
+  \node[anchor=west] at (3.25,1.83) {$\mathbf n$};
 \end{scope}
 
-% Compact legend
-\begin{scope}[yshift=-0.30cm]
-  \draw[guide] (1.30,0)--(1.85,0);
-  \node[anchor=west] at (1.94,0) {$\delta\mathbf y$};
+% Shared notation
+\begin{scope}[yshift=-0.36cm]
+  \draw[guide] (1.00,0)--(1.50,0);
+  \node[anchor=west] at (1.60,0) {$\delta\mathbf y$};
 
-  \draw[velocity] (3.10,0)--(3.65,0);
-  \node[anchor=west] at (3.74,0) {$\delta\dot{\mathbf r}$};
+  \draw[velocity] (3.02,0)--(3.52,0);
+  \node[anchor=west] at (3.62,0) {$\delta\dot{\mathbf r}$};
 
-  \fill (5.65,0) circle (2.0pt);
-  \node[anchor=west] at (5.78,0) {size $\propto p_i$};
+  \fill (5.48,0) circle (1.55pt);
+  \node[anchor=west] at (5.62,0) {size $\propto p_i$};
 \end{scope}
 
 \end{tikzpicture}
