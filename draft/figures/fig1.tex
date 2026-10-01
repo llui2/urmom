@@ -112,10 +112,11 @@
   \node[anchor=east] at ($(r)+(-0.10,-0.03)$) {$\mathbf r$};
   \node[response] at (rs) {};
   \node[anchor=north west] at ($(rs)+(0.10,-0.08)$) {$\mathbf r_*$};
-  \node[target] at (y) {};
-  \node[anchor=south west] at ($(y)+(0.08,0.04)$) {$\mathbf y$};
 
   \draw[guide] (rs)--(y);
+
+  \node[target] at (y) {};
+  \node[anchor=south west] at ($(y)+(0.08,0.04)$) {$\mathbf y$};
 
   \node at (1.53,-0.30) {$\mathbf y\notin\mathcal R$};
 \end{scope}
