@@ -9,6 +9,7 @@ git pull --ff-only
 
 cd draft/figures
 latexmk -g -pdf -interaction=nonstopmode -halt-on-error fig1.tex
+latexmk -g -pdf -interaction=nonstopmode -halt-on-error fig2.tex
 
 cd ..
 latexmk -g -pdf -interaction=nonstopmode -halt-on-error main.tex
