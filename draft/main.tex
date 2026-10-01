@@ -5,6 +5,7 @@
 \let\Bbbk\relax
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{microtype}
+\usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage[numbers]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
@@ -264,6 +265,15 @@ The hyperplane
 is a supporting hyperplane of $\mathcal R$. In two dimensions, a proper face is either an edge or a vertex.
 
 \noindent\hrulefill
+
+Figure~\ref{fig:response-geometry} summarizes the three possible positions of a constant target relative to the available response set.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1}
+\caption{Geometry of the available response set. An interior target lies within the convex hull of the response vectors. A boundary target lies on a face $F$, with $g_i$ measuring the normal separation of a response from its supporting hyperplane. For an exterior target, the closest attainable response is the Euclidean projection $\mathbf r_*=\Pi_{\mathcal R}\mathbf y$.}
+\label{fig:response-geometry}
+\end{figure}
 
 The position of a constant target $\mathbf y$ relative to $\mathcal R$ gives three different asymptotic regimes.
 
