@@ -12,533 +12,549 @@
 
 \begin{document}
 
-\title{Phenotypic specialization creates history-dependent adaptation times}
+\title{History-dependent recovery in microbial resource competition}
 \maketitle
 
-A heterogeneous population can preserve phenotypic alternatives that become useful when the environment changes. Adaptation to the present environment, however, can itself deplete those alternatives. We study a minimal population model with a finite set of phenotypic states $\{\mathbf a_i\}$ occupied with fractions $p_i$. The population-mean phenotype
+Microbial strains competing for substitutable resources can coexist by dividing metabolic effort across different resource-use strategies. In a broad class of consumer--resource models, coexistence is controlled geometrically: the environmental resource supply must lie in the convex hull of the strategies present in the community \cite{macarthur1970,posfai2017,taillefumier2017,good2018}. We ask a dynamical question that is distinct from this equilibrium condition. If a community is exposed to one resource environment for a long time, how strongly are alternative strategies depleted, and how long does it take to recover when the resource supply changes?
+
+We consider fixed resource strategies $\boldsymbol\alpha_i$ with strain frequencies $p_i$ and normalized resource supply $\boldsymbol\beta$. The community-mean strategy is
 \begin{equation*}
-\mathbf r
+\bar{\boldsymbol\alpha}
 =
-\sum_i p_i\mathbf a_i
+\sum_i p_i \boldsymbol\alpha_i.
 \end{equation*}
-adapts toward an environment-dependent target $\mathbf y$. The same redistribution changes the phenotypic covariance
+In the neutral fixed-strategy limit of substitutable-resource competition, the deterministic frequency dynamics can be written
 \begin{equation*}
+\dot p_i
+=
+p_i
+\left[
+\boldsymbol\alpha_i^{\mathsf T}
+\left(
+\boldsymbol\beta \oslash \bar{\boldsymbol\alpha}
+\right)
+-1
+\right],
+\end{equation*}
+where $\oslash$ denotes componentwise division. This dynamics drives the community mean toward the resource supply while simultaneously changing the abundance of the strategies that make future responses possible. We show that the position of $\boldsymbol\beta$ relative to the convex hull of the available strategies gives three asymptotic regimes. Interior supplies preserve finite strain abundances, boundary supplies deplete off-face strains algebraically, and supplies outside the hull deplete them exponentially. After a switch in resource supply, these regimes produce recovery times $O(1)$, $\Theta(\log T)$, and $\Theta(T)$ as a function of the duration $T$ of the first exposure.
+
+\section{Results}
+
+\subsection{Resource competition dynamics}
+
+Consider $d$ substitutable resources. Strain $i$ is characterized by a normalized resource-use strategy
+\begin{equation}
+\boldsymbol\alpha_i
+\in
+\mathbb R^d,
+\qquad
+\alpha_{ik} > 0,
+\qquad
+\sum_{k=1}^d \alpha_{ik} = 1.
+\label{eq:strategy}
+\end{equation}
+The environment supplies the resources in proportions
+\begin{equation}
+\boldsymbol\beta
+\in
+\mathbb R^d,
+\qquad
+\beta_k > 0,
+\qquad
+\sum_{k=1}^d \beta_k = 1.
+\label{eq:supply}
+\end{equation}
+The strain frequencies satisfy
+\begin{equation}
+p_i \geq 0,
+\qquad
+\sum_i p_i = 1,
+\label{eq:simplex}
+\end{equation}
+and the community-mean resource strategy is
+\begin{equation}
+\bar{\boldsymbol\alpha}
+=
+\sum_i p_i \boldsymbol\alpha_i.
+\label{eq:mean-strategy}
+\end{equation}
+
+Consumer--resource models with a finite metabolic budget naturally lead to competition between such normalized strategies \cite{posfai2017,taillefumier2017}. In the fixed-strategy, equal-baseline-fitness limit used by Good, Martis, and Hallatschek, selection tunes the population-averaged uptake toward the environmental supply \cite{good2018}. We take the corresponding deterministic frequency dynamics
+\begin{equation}
+\dot p_i
+=
+p_i
+\left[
+\sum_{k=1}^d
+\alpha_{ik}
+\frac{\beta_k}{\bar\alpha_k}
+-1
+\right].
+\label{eq:resource-replicator}
+\end{equation}
+The simplex is invariant because
+\begin{equation}
+\sum_i p_i
+\sum_k
+\alpha_{ik}
+\frac{\beta_k}{\bar\alpha_k}
+=
+\sum_k \beta_k
+=
+1.
+\end{equation}
+Thus Eq.~\eqref{eq:resource-replicator} changes only the relative abundance of the competing strategies.
+
+The dynamics has a direct variational interpretation. Define the mismatch between the supplied and population-averaged resource compositions by
+\begin{equation}
+E
+=
+D_{\mathrm{KL}}
+\left(
+\boldsymbol\beta
+\middle\|
+\bar{\boldsymbol\alpha}
+\right)
+=
+\sum_k
+\beta_k
+\log
+\frac{\beta_k}{\bar\alpha_k}.
+\label{eq:kl}
+\end{equation}
+Then
+\begin{equation}
+\frac{\partial E}{\partial p_i}
+=
+-
+\sum_k
+\alpha_{ik}
+\frac{\beta_k}{\bar\alpha_k},
+\end{equation}
+and Eq.~\eqref{eq:resource-replicator} is the Shahshahani gradient flow of $E$ on the frequency simplex \cite{shahshahani1979}.
+
+Define the covariance of resource strategies
+\begin{equation}
 \mathbf C
 =
 \sum_i
 p_i
-(\mathbf a_i-\mathbf r)
-(\mathbf a_i-\mathbf r)^{\mathsf T},
-\end{equation*}
-which enters directly in the response law
-\begin{equation*}
-\dot{\mathbf r}
+\left(
+\boldsymbol\alpha_i-
+\bar{\boldsymbol\alpha}
+\right)
+\left(
+\boldsymbol\alpha_i-
+\bar{\boldsymbol\alpha}
+\right)^{\mathsf T}.
+\label{eq:covariance}
+\end{equation}
+Differentiating Eq.~\eqref{eq:mean-strategy} gives
+\begin{equation}
+\dot{\bar{\boldsymbol\alpha}}
 =
 \mathbf C
-(\mathbf y-\mathbf r).
-\end{equation*}
-Exposure therefore changes both the current population phenotype and the directions in which the population can subsequently respond. We show that the geometry of the environmental target relative to the available phenotypic repertoire determines how alternatives are depleted. Interior targets preserve finite phenotypic variation, boundary targets suppress unused phenotypes algebraically, and unattainable targets suppress them exponentially. After an environmental switch, these regimes produce recovery times $O(1)$, $\Theta(\log T)$, and $\Theta(T)$ as a function of the duration $T$ of the first exposure.
-
-\section{Results}
-
-Populations in variable environments can respond by tracking environmental cues or by maintaining phenotypic heterogeneity, including bet-hedging strategies in which different phenotypes are retained because different environments favor them \cite{kussell2005,childs2010,xue2019}. Such heterogeneity can leave a subpopulation prepared for a future environmental change \cite{dejong2011,villamartin2019}. Bet hedging is a specific evolutionary strategy defined through long-term fitness under environmental uncertainty, and should not be identified with phenotypic heterogeneity in general \cite{dejong2011}. Here we ask a different dynamical question: how does adaptation to one environment change the composition of a heterogeneous population, and how does that altered composition constrain adaptation to the next environment?
-
-We consider the simplest setting in which the available phenotypic states are fixed and only their population fractions change. The model does not optimize a strategy over many environments. Instead, it isolates the depletion caused by exposure to the current environment and the recovery cost that follows when the environment changes.
-
-\subsection{Phenotypic composition dynamics}
-
-Let
-\begin{equation}
-\mathbf a_i\in\mathbb R^d,
-\qquad
-i=1,\ldots,n,
+\left(
+\boldsymbol\beta
+\oslash
+\bar{\boldsymbol\alpha}
+\right).
 \end{equation}
-represent a finite set of phenotypic states. The coordinates of $\mathbf a_i$ may describe any collection of measurable traits relevant to the environmental response. Let $p_i$ be the fraction of the population in phenotype $i$, with
+Because all strategy vectors are normalized,
 \begin{equation}
-p_i\geq0,
-\qquad
-\sum_i p_i=1.
-\label{eq:simplex}
+\mathbf C \mathbf 1 = 0,
 \end{equation}
-The population-mean phenotype is
+so the same equation can be written as
 \begin{equation}
-\mathbf r
+\dot{\bar{\boldsymbol\alpha}}
 =
-\sum_i p_i\mathbf a_i.
-\label{eq:response}
+\mathbf C
+\mathbf D
+\left(
+\bar{\boldsymbol\alpha}
+\right)^{-1}
+\left(
+\boldsymbol\beta
+-
+\bar{\boldsymbol\alpha}
+\right),
+\label{eq:mean-dynamics}
 \end{equation}
-We assume that the vectors $\mathbf a_i$ affinely span $\mathbb R^d$. If they span a lower-dimensional affine subspace, the same construction applies after restricting all phenotype coordinates to that subspace.
+where $\mathbf D(\bar{\boldsymbol\alpha})$ is the diagonal matrix with entries $\bar\alpha_k$. The covariance therefore appears directly in the ecological response law, but with the resource-dependent metric inherited from the consumer--resource dynamics.
 
-Let $\mathbf y(t)\in\mathbb R^d$ denote the phenotype favored by the current environment and define the population-level mismatch
+For fixed $\boldsymbol\beta$,
+\begin{equation}
+\dot E
+=
+-
+\left(
+\boldsymbol\beta
+\oslash
+\bar{\boldsymbol\alpha}
+\right)^{\mathsf T}
+\mathbf C
+\left(
+\boldsymbol\beta
+\oslash
+\bar{\boldsymbol\alpha}
+\right)
+\leq 0.
+\label{eq:kl-decay}
+\end{equation}
+Near a matched state $\bar{\boldsymbol\alpha}=\boldsymbol\beta$, the KL divergence has the quadratic expansion
 \begin{equation}
 E
 =
 \frac12
-\|\mathbf r-\mathbf y\|^2.
-\label{eq:error}
-\end{equation}
-We use the simplest frequency dynamics that decreases this mismatch while preserving the simplex: the Shahshahani gradient flow of $E$ \cite{shahshahani1979},
-\begin{equation}
-\dot p_i
-=
--p_i
 \left(
-\frac{\partial E}{\partial p_i}
--
-\sum_j
-p_j
-\frac{\partial E}{\partial p_j}
+\bar{\boldsymbol\alpha}-\boldsymbol\beta
+\right)^{\mathsf T}
+\mathbf D(\boldsymbol\beta)^{-1}
+\left(
+\bar{\boldsymbol\alpha}-\boldsymbol\beta
+\right)
++
+O
+\left(
+\|\bar{\boldsymbol\alpha}-\boldsymbol\beta\|^3
 \right).
-\label{eq:shahshahani}
+\label{eq:local-kl}
 \end{equation}
-Since
-\begin{equation}
-\frac{\partial E}{\partial p_i}
-=
-\mathbf a_i^{\mathsf T}
-(\mathbf r-\mathbf y),
-\end{equation}
-Eq.~\eqref{eq:shahshahani} becomes
-\begin{equation}
-\dot p_i
-=
-p_i
-(\mathbf a_i-\mathbf r)^{\mathsf T}
-(\mathbf y-\mathbf r).
-\label{eq:replicator}
-\end{equation}
-This has the standard replicator form: phenotypes whose trait vector is better aligned with the current environmental mismatch increase in relative abundance. The model is therefore a phenomenological description of composition change under differential expansion or selection; it does not specify the intracellular mechanism that generates the phenotypic states. The simplex is invariant under Eq.~\eqref{eq:replicator}. If $p_i(0)>0$, then $p_i(t)>0$ for every finite $t$.
+Thus the quadratic response model arises locally from the consumer--resource mismatch rather than being imposed as a biological fitness function.
 
-Define the phenotypic covariance
-\begin{equation}
-\mathbf C
-=
-\sum_i
-p_i
-(\mathbf a_i-\mathbf r)
-(\mathbf a_i-\mathbf r)^{\mathsf T}.
-\label{eq:covariance}
-\end{equation}
-Differentiating Eq.~\eqref{eq:response} and using Eq.~\eqref{eq:replicator} gives
-\begin{equation}
-\dot{\mathbf r}
-=
-\mathbf C
-(\mathbf y-\mathbf r).
-\label{eq:response-dynamics}
-\end{equation}
-Thus $\mathbf C$ is not introduced as an additional diversity or adaptability score. It is the covariance generated by the current population composition, and it appears directly as the local response operator. For a fixed environment,
-\begin{equation}
-\dot E
-=
--(\mathbf r-\mathbf y)^{\mathsf T}
-\mathbf C
-(\mathbf r-\mathbf y)
-\leq0.
-\label{eq:error-decay}
-\end{equation}
-At a matched state, a small environmental change $\delta\mathbf y$ satisfies
-\begin{equation}
-\delta\dot{\mathbf r}
-=
-\mathbf C
-(\delta\mathbf y-\delta\mathbf r).
-\label{eq:linear-response}
-\end{equation}
-The eigenvectors of $\mathbf C$ therefore give the local response directions, while its nonzero eigenvalues give the corresponding relaxation rates. Changing the population composition changes these directions and rates.
+\subsection{Geometry of the available resource strategies}
 
-\subsection{Exponential coordinates}
-
-Equation~\eqref{eq:replicator} can be integrated after introducing
+The set of community-mean strategies attainable by changing strain frequencies is
 \begin{equation}
-\boldsymbol\theta(t)
+\mathcal R
 =
-\int_0^t
-\left[
-\mathbf y(s)-\mathbf r(s)
-\right]
-\,\mathrm ds.
-\label{eq:theta}
+\operatorname{conv}
+\left\{
+\boldsymbol\alpha_1,
+\ldots,
+\boldsymbol\alpha_n
+\right\}.
+\label{eq:repertoire}
 \end{equation}
-The population fractions then satisfy
+This convex-hull construction is already central to resource-competition models: when the normalized resource supply lies inside the hull of the available consumption strategies, coexistence can tune the community-average uptake to match the supply \cite{posfai2017,good2018}. Related geometric formulations have been developed for coexistence and perturbation response in more general consumer--resource systems \cite{blumenthal2023,goyal2025}.
+
+Figure~\ref{fig:response-geometry} summarizes the three positions of the resource supply relative to the strategy hull.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1}
+\caption{Geometry of resource competition. Each point $\boldsymbol\alpha_i$ is a strain resource-use strategy, $\bar{\boldsymbol\alpha}$ is the current community mean, and $\boldsymbol\beta$ is the normalized resource supply. An interior supply can be matched by a mixture with broad support. A boundary supply lies on a face $F$, with $g_i$ measuring the separation of strategy $i$ from the supporting hyperplane. When the supply lies outside $\mathcal R$, the community converges to the KL projection $\bar{\boldsymbol\alpha}_*$ of $\boldsymbol\beta$ onto the attainable strategy set.}
+\label{fig:response-geometry}
+\end{figure}
+
+To analyze depletion of rare strains, introduce dual coordinates
+\begin{equation}
+\dot{\boldsymbol\theta}
+=
+\boldsymbol\beta
+\oslash
+\bar{\boldsymbol\alpha}
+-
+\mathbf 1.
+\label{eq:theta-dynamics}
+\end{equation}
+Equation~\eqref{eq:resource-replicator} then integrates to
 \begin{equation}
 p_i(t)
 =
 \frac{
 p_i(0)
-e^{\mathbf a_i^{\mathsf T}\boldsymbol\theta(t)}
+\exp
+\left[
+\boldsymbol\alpha_i^{\mathsf T}
+\boldsymbol\theta(t)
+\right]
 }{
 \sum_j
 p_j(0)
-e^{\mathbf a_j^{\mathsf T}\boldsymbol\theta(t)}
+\exp
+\left[
+\boldsymbol\alpha_j^{\mathsf T}
+\boldsymbol\theta(t)
+\right]
 }.
 \label{eq:weights-solution}
 \end{equation}
-Introduce
+This form makes the asymptotic distinction between interior, boundary, and exterior supplies explicit.
+
+\subsection{Interior resource supply}
+
+Suppose
 \begin{equation}
-\psi(\boldsymbol\theta)
+\boldsymbol\beta
+\in
+\operatorname{relint}
+\mathcal R.
+\end{equation}
+Then there is a finite dual coordinate $\boldsymbol\theta_*$ for which
+\begin{equation}
+\bar{\boldsymbol\alpha}
+\left(
+\boldsymbol\theta_*
+\right)
 =
-\log
-\sum_i
-p_i(0)
-e^{\mathbf a_i^{\mathsf T}\boldsymbol\theta}.
-\label{eq:psi}
+\boldsymbol\beta.
 \end{equation}
-The first two derivatives of $\psi$ are
+Starting from positive frequencies, Eq.~\eqref{eq:weights-solution} therefore converges to a finite composition with
 \begin{equation}
-\nabla\psi
-=
-\mathbf r,
-\qquad
-\nabla^2\psi
-=
-\mathbf C.
-\label{eq:gradient-hessian}
+p_i(t)
+\to
+p_i^* > 0.
+\label{eq:interior-frequencies}
 \end{equation}
-These are the standard mean and covariance identities of an exponential family \cite{amari2016}. The dynamics reduce to
-\begin{equation}
-\dot{\boldsymbol\theta}
-=
-\mathbf y(t)
--
-\nabla\psi(\boldsymbol\theta).
-\label{eq:theta-dynamics}
-\end{equation}
-For constant $\mathbf y$, define
-\begin{equation}
-V_{\mathbf y}(\boldsymbol\theta)
-=
-\psi(\boldsymbol\theta)
--
-\mathbf y^{\mathsf T}\boldsymbol\theta.
-\label{eq:potential}
-\end{equation}
-Then
-\begin{equation}
-\dot{\boldsymbol\theta}
-=
--\nabla V_{\mathbf y},
-\label{eq:gradient-flow}
-\end{equation}
-so the long-time population composition is determined by the geometry of $\psi$ relative to the environmental target.
+No strain is asymptotically depleted. The resource supply is matched without driving the community onto a lower-dimensional face of its strategy hull.
 
-\subsection{Geometry of the phenotypic repertoire}
+\subsection{Boundary supply and algebraic depletion}
 
-The set of all population-mean phenotypes that can be obtained by redistributing the fractions is
+Now let $\boldsymbol\beta$ lie in the relative interior of a proper codimension-one face $F$ of $\mathcal R$. Choose a normal $\mathbf n$ and scalar $h$ such that
 \begin{equation}
-\mathcal R
-=
-\operatorname{conv}
-\{\mathbf a_1,\ldots,\mathbf a_n\}.
-\label{eq:repertoire}
-\end{equation}
-We refer to $\mathcal R$ as the phenotypic repertoire of the population.
-
-\noindent\hrulefill
-
-For points $\mathbf a_1,\ldots,\mathbf a_n$, their convex hull is
-\begin{equation}
-\operatorname{conv}
-\{\mathbf a_i\}
-=
-\left\{
-\sum_i
-q_i\mathbf a_i
-:
-q_i\geq0,
-\ \sum_i q_i=1
-\right\}.
-\label{eq:convex-hull-definition}
-\end{equation}
-Hence $\mathcal R$ is exactly the set of mean phenotypes compatible with Eq.~\eqref{eq:simplex}. Since the $\mathbf a_i$ affinely span $\mathbb R^d$, $\mathcal R$ has a nonempty interior in $\mathbb R^d$.
-
-A face $F$ of $\mathcal R$ is the subset on which a linear functional is maximal. Thus there exist a nonzero vector $\mathbf n$ and a scalar $h$ such that
-\begin{equation}
-F
-=
-\left\{
-\mathbf x\in\mathcal R:
-\mathbf n^{\mathsf T}\mathbf x=h
-\right\},
-\qquad
-\mathbf n^{\mathsf T}\mathbf x\leq h
-\quad
-\text{for all }
-\mathbf x\in\mathcal R.
-\label{eq:face-definition}
-\end{equation}
-The hyperplane
-\begin{equation}
-\mathbf n^{\mathsf T}\mathbf x=h
-\end{equation}
-is a supporting hyperplane of $\mathcal R$. In two dimensions, a proper face is either an edge or a vertex.
-
-\noindent\hrulefill
-
-Figure~\ref{fig:response-geometry} summarizes the three possible positions of an environment-selected target relative to the available phenotypic repertoire.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/fig1}
-\caption{Geometry of the phenotypic repertoire. Each vertex represents an available phenotype $\mathbf a_i$, and $\mathbf r$ is the current population-mean phenotype. An interior environmental target can be realized by a mixture of available phenotypes. A boundary target lies on a face $F$, with $g_i$ measuring the normal separation of phenotype $i$ from its supporting hyperplane. For an unattainable target, the closest realizable population phenotype is the Euclidean projection $\mathbf r_*=\Pi_{\mathcal R}\mathbf y$.}
-\label{fig:response-geometry}
-\end{figure}
-
-The position of a constant environmental target $\mathbf y$ relative to $\mathcal R$ gives three distinct asymptotic regimes.
-
-If
-\begin{equation}
-\mathbf y\in\operatorname{int}\mathcal R,
-\end{equation}
-there exists a finite $\boldsymbol\theta_*$ such that
-\begin{equation}
-\nabla\psi(\boldsymbol\theta_*)
-=
-\mathbf y.
-\label{eq:interior-critical}
-\end{equation}
-Since the initial fractions are positive and the $\mathbf a_i$ affinely span $\mathbb R^d$, the Hessian
-\begin{equation}
-\mathbf C_*
-=
-\nabla^2\psi(\boldsymbol\theta_*)
-\end{equation}
-is positive definite. Thus
-\begin{equation}
-\boldsymbol\theta(t)\to\boldsymbol\theta_*,
-\qquad
-\mathbf r(t)\to\mathbf y,
-\qquad
-\mathbf C(t)\to\mathbf C_*.
-\label{eq:interior-limit}
-\end{equation}
-All phenotypic states retain a positive limiting fraction, and all response directions retain a finite linear relaxation rate. Adaptation to an interior target therefore does not asymptotically eliminate any of the available alternatives.
-
-\subsection{Boundary targets and phenotypic specialization}
-
-Let $\mathbf y$ lie in the relative interior of a proper codimension-one face $F$ of $\mathcal R$. By Eq.~\eqref{eq:face-definition}, choose a unit normal $\mathbf n$ such that
-\begin{equation}
-\mathbf n^{\mathsf T}\mathbf a_i
+\mathbf n^{\mathsf T}
+\boldsymbol\alpha_i
 =
 h
-\quad
+\qquad
 \text{for }
-\mathbf a_i\in F,
+\boldsymbol\alpha_i \in F,
 \end{equation}
 while
 \begin{equation}
 g_i
 =
-h-\mathbf n^{\mathsf T}\mathbf a_i
->0
-\quad
+h
+-
+\mathbf n^{\mathsf T}
+\boldsymbol\alpha_i
+>
+0
+\qquad
 \text{for }
-\mathbf a_i\notin F.
+\boldsymbol\alpha_i \notin F.
 \label{eq:gap}
 \end{equation}
-The quantity $g_i$ is the separation of phenotype $i$ from the selected face along $\mathbf n$. Let
+Let
 \begin{equation}
 g
 =
-\min_{\mathbf a_i\notin F}g_i.
-\label{eq:min-gap}
+\min_{\boldsymbol\alpha_i\notin F}
+g_i.
 \end{equation}
 
-For any finite $\boldsymbol\theta$, Eq.~\eqref{eq:weights-solution} gives positive abundance to every phenotype. The corresponding mean $\mathbf r$ therefore lies in $\operatorname{int}\mathcal R$. Reaching a target on $F$ requires
-\begin{equation}
-\|\boldsymbol\theta(t)\|
-\to\infty.
-\end{equation}
-Write
-\begin{equation}
-s(t)
-=
-\mathbf n^{\mathsf T}\boldsymbol\theta(t).
-\end{equation}
-Since $\mathbf n^{\mathsf T}\mathbf y=h$, Eq.~\eqref{eq:theta-dynamics} gives
-\begin{equation}
-\dot s
-=
-h-\mathbf n^{\mathsf T}\mathbf r
-=
-\sum_{\mathbf a_i\notin F}
-p_i g_i.
-\label{eq:normal-dynamics}
-\end{equation}
-
-Decompose
+Matching a boundary supply requires the frequencies of strains outside $F$ to vanish. The dual coordinate therefore diverges in the exposed normal direction. Writing
 \begin{equation}
 \boldsymbol\theta
 =
 s\mathbf n
 +
 \boldsymbol\theta_{\parallel},
-\qquad
-\mathbf n^{\mathsf T}\boldsymbol\theta_{\parallel}=0.
 \end{equation}
-Because $\mathbf y$ lies in the relative interior of $F$, the exponential family restricted to the phenotypes on $F$ has a finite tangential coordinate that realizes $\mathbf y$. The tangential component therefore approaches a finite limit while $s\to\infty$. Equation~\eqref{eq:weights-solution} then gives
+with bounded tangential component gives from Eq.~\eqref{eq:weights-solution}
 \begin{equation}
 p_i
 \asymp
-e^{-g_i s}
+\exp
+\left(
+-g_i s
+\right)
 \qquad
 \text{for }
-\mathbf a_i\notin F.
+\boldsymbol\alpha_i\notin F.
 \label{eq:boundary-weight-s}
 \end{equation}
-Here $f\asymp g$ means that $f/g$ remains bounded above and below by positive constants for sufficiently large time. The terms with the smallest gap $g$ dominate Eq.~\eqref{eq:normal-dynamics}, so
+Near $\bar{\boldsymbol\alpha}=\boldsymbol\beta$, Eq.~\eqref{eq:theta-dynamics} becomes
+\begin{equation}
+\dot{\boldsymbol\theta}
+=
+\mathbf D(\boldsymbol\beta)^{-1}
+\left(
+\boldsymbol\beta
+-
+\bar{\boldsymbol\alpha}
+\right)
++
+O
+\left(
+\|\bar{\boldsymbol\alpha}-\boldsymbol\beta\|^2
+\right).
+\label{eq:theta-local}
+\end{equation}
+The normal displacement is generated by the off-face strains and is of order $\exp(-gs)$. Hence, for a nondegenerate codimension-one face,
 \begin{equation}
 \dot s
 \asymp
-e^{-gs}.
+\exp
+\left(
+-gs
+\right).
 \end{equation}
-Integrating gives
+Integration gives
 \begin{equation}
 s(t)
 =
-\frac{1}{g}\log t+O(1),
-\label{eq:boundary-s}
+\frac{1}{g}
+\log t
++
+O(1),
 \end{equation}
 and therefore
 \begin{equation}
 p_i(t)
 \asymp
-t^{-g_i/g}.
+ t^{-g_i/g}.
 \label{eq:boundary-weights}
 \end{equation}
-In particular, the closest phenotypes outside the selected face decay as $t^{-1}$.
-
-The same asymptotic law appears in the phenotypic covariance along the normal direction. From Eq.~\eqref{eq:covariance},
+In particular, the least-separated off-face strains decay as
 \begin{equation}
-\mathbf n^{\mathsf T}
-\mathbf C
-\mathbf n
-=
-\sum_i
-p_i
-\left[
-\mathbf n^{\mathsf T}
-(\mathbf a_i-\mathbf r)
-\right]^2.
-\label{eq:normal-covariance}
+p_i(t)
+\asymp
+\frac{1}{t}.
 \end{equation}
-The phenotypes on $F$ share the same normal coordinate, while those outside $F$ have a nonzero gap. Hence
+
+The same depletion appears in the covariance normal to the selected face:
 \begin{equation}
 \mathbf n^{\mathsf T}
 \mathbf C(t)
 \mathbf n
 \asymp
 \frac{1}{t}.
-\label{eq:boundary-capacity}
+\label{eq:boundary-covariance}
 \end{equation}
-The population reaches the environmental target, but it does so by specializing onto the phenotypic face $F$. Variation normal to that face is progressively lost, and the corresponding response rate vanishes algebraically.
+Thus the community can match a boundary supply, but only while progressively losing the resource strategies needed to move away from that face.
 
-\subsection{Targets outside the phenotypic repertoire}
+\subsection{Supply outside the strategy hull}
 
-Now let
+Suppose
 \begin{equation}
-\mathbf y\notin\mathcal R.
+\boldsymbol\beta
+\notin
+\mathcal R.
 \end{equation}
-The environment favors a phenotype that cannot be realized by any mixture of the available states. Define the Euclidean projection of $\mathbf y$ onto $\mathcal R$ by
+The community cannot match the supplied resource composition. Instead, the Lyapunov function in Eq.~\eqref{eq:kl} converges to its unique minimizer over the attainable set,
 \begin{equation}
-\mathbf r_*
-=
-\Pi_{\mathcal R}\mathbf y
+\bar{\boldsymbol\alpha}_*
 =
 \operatorname*{arg\,min}_{\mathbf x\in\mathcal R}
-\|\mathbf y-\mathbf x\|.
-\label{eq:projection}
+D_{\mathrm{KL}}
+\left(
+\boldsymbol\beta
+\middle\|
+\mathbf x
+\right).
+\label{eq:kl-projection}
 \end{equation}
-
-\noindent\hrulefill
-
-For a closed convex set $\mathcal R$, the projection $\mathbf r_*$ is uniquely defined and satisfies
+Define
 \begin{equation}
-(\mathbf y-\mathbf r_*)^{\mathsf T}
-(\mathbf x-\mathbf r_*)
-\leq0
+\mathbf q_*
+=
+\boldsymbol\beta
+\oslash
+\bar{\boldsymbol\alpha}_*.
+\end{equation}
+The first-order condition for the constrained minimum is
+\begin{equation}
+\mathbf q_*^{\mathsf T}
+\left(
+\mathbf x
+-
+\bar{\boldsymbol\alpha}_*
+\right)
+\leq
+0
 \qquad
 \text{for every }
 \mathbf x\in\mathcal R.
-\label{eq:projection-condition}
+\label{eq:kl-support}
 \end{equation}
-Thus
+Since
 \begin{equation}
-\mathbf e
+\mathbf q_*^{\mathsf T}
+\bar{\boldsymbol\alpha}_*
 =
-\mathbf y-\mathbf r_*
+1,
 \end{equation}
-is normal to a supporting hyperplane of $\mathcal R$ at $\mathbf r_*$. This is the standard first-order characterization of Euclidean projection onto a convex set \cite{rockafellar1970}.
-
-\noindent\hrulefill
-
-Along the adaptive dynamics,
-\begin{equation}
-\mathbf r(t)\to\mathbf r_*,
-\end{equation}
-and therefore Eq.~\eqref{eq:theta} gives
-\begin{equation}
-\boldsymbol\theta(t)
-=
-\mathbf e\,t+o(t).
-\label{eq:outside-theta}
-\end{equation}
-Let
+the limiting community lies on the exposed face
 \begin{equation}
 F_*
 =
 \left\{
-\mathbf a_i:
-\mathbf e^{\mathsf T}\mathbf a_i
+\boldsymbol\alpha_i:
+\mathbf q_*^{\mathsf T}
+\boldsymbol\alpha_i
 =
-\max_j
-\mathbf e^{\mathsf T}\mathbf a_j
-\right\}
-\label{eq:exposed-face}
+1
+\right\}.
 \end{equation}
-be the phenotypic face exposed by $\mathbf e$. For $\mathbf a_i\notin F_*$, define
+For a strain outside this face, define its asymptotic disadvantage
 \begin{equation}
 \Delta_i
 =
-\mathbf e^{\mathsf T}
-(\mathbf r_*-\mathbf a_i)
->0.
-\label{eq:external-gap}
+1
+-
+\mathbf q_*^{\mathsf T}
+\boldsymbol\alpha_i
+>
+0.
+\label{eq:outside-gap}
 \end{equation}
-Substituting Eq.~\eqref{eq:outside-theta} into Eq.~\eqref{eq:weights-solution} gives
+Equation~\eqref{eq:resource-replicator} gives
+\begin{equation}
+\frac{\mathrm d}{\mathrm dt}
+\log p_i
+\to
+-\Delta_i,
+\end{equation}
+and therefore
 \begin{equation}
 p_i(t)
 =
-e^{-\Delta_i t+o(t)}
-\qquad
-\text{for }
-\mathbf a_i\notin F_*.
+\exp
+\left[
+-\Delta_i t
++
+o(t)
+\right].
 \label{eq:outside-weights}
 \end{equation}
-Thus an unattainable environmental target drives exponential depletion of phenotypes away from the limiting face. This is a stronger form of specialization than for a boundary target.
+An unattainable supply composition therefore drives exponential depletion of strategies outside the limiting face.
 
-\subsection{Adaptation after an environmental change}
+\subsection{Recovery after a resource switch}
 
-Consider an environment with target $\mathbf y^-$ applied until time $T$, followed by a second environment with target $\mathbf y^+$. Suppose phenotype $i$ has been depleted during the first exposure and becomes advantageous after the switch. From Eq.~\eqref{eq:replicator},
+Apply a first resource supply $\boldsymbol\beta^-$ until time $T$, then switch to $\boldsymbol\beta^+$. Suppose strain $i$ was depleted during the first exposure and has positive invasion growth after the switch. Its instantaneous log-frequency growth is
 \begin{equation}
 \frac{\mathrm d}{\mathrm dt}
 \log p_i
 =
-(\mathbf a_i-\mathbf r)^{\mathsf T}
-(\mathbf y^+-\mathbf r).
-\label{eq:log-growth}
+\boldsymbol\alpha_i^{\mathsf T}
+\left(
+\boldsymbol\beta^+
+\oslash
+\bar{\boldsymbol\alpha}
+\right)
+-1.
+\label{eq:post-switch-growth}
 \end{equation}
-Assume that while $p_i$ grows from $p_i(T)$ to a fixed observable threshold $\eta$, its growth rate satisfies
+Assume that while $p_i$ grows from $p_i(T)$ to a fixed threshold $\eta$, this rate satisfies
 \begin{equation}
-0<\sigma_-
+0
+<
+\sigma_-
 \leq
-(\mathbf a_i-\mathbf r)^{\mathsf T}
-(\mathbf y^+-\mathbf r)
+\boldsymbol\alpha_i^{\mathsf T}
+\left(
+\boldsymbol\beta^+
+\oslash
+\bar{\boldsymbol\alpha}
+\right)
+-1
 \leq
 \sigma_+.
 \label{eq:growth-bounds}
 \end{equation}
-If $\tau_i(T)$ denotes the first time after the environmental switch at which $p_i=\eta$, integration of Eq.~\eqref{eq:log-growth} yields
+If $\tau_i(T)$ is the first time after the switch at which $p_i=\eta$, then
 \begin{equation}
 \frac{1}{\sigma_+}
 \log
@@ -551,53 +567,42 @@ If $\tau_i(T)$ denotes the first time after the environmental switch at which $p
 \frac{\eta}{p_i(T)}.
 \label{eq:recovery-bound}
 \end{equation}
+The depletion law during the first environment therefore directly fixes the later recovery timescale.
 
-For an interior first target, $p_i(T)$ approaches a positive limit and the recovery time remains
+For an interior first supply, Eq.~\eqref{eq:interior-frequencies} gives
 \begin{equation}
 \tau_i(T)
 =
 O(1).
 \end{equation}
-For a boundary target, Eq.~\eqref{eq:boundary-weights} gives
-\begin{equation}
-p_i(T)
-\asymp
-T^{-\alpha_i},
-\qquad
-\alpha_i
-=
-\frac{g_i}{g},
-\end{equation}
-and Eq.~\eqref{eq:recovery-bound} gives
+For a boundary supply, Eq.~\eqref{eq:boundary-weights} gives
 \begin{equation}
 \tau_i(T)
 =
-\Theta(\log T).
+\Theta
+\left(
+\log T
+\right).
 \label{eq:boundary-recovery}
 \end{equation}
-For an unattainable first target, Eq.~\eqref{eq:outside-weights} gives
-\begin{equation}
-p_i(T)
-=
-e^{-\Delta_iT+o(T)},
-\end{equation}
-and therefore
+For a first supply outside the strategy hull, Eq.~\eqref{eq:outside-weights} gives
 \begin{equation}
 \tau_i(T)
 =
 \Theta(T).
 \label{eq:outside-recovery}
 \end{equation}
-
-The duration of the first exposure therefore enters the later adaptation time through the abundance of phenotypic alternatives that survive that exposure. An environment that can be matched while retaining a broad mixture leaves no asymptotically growing memory in the recovery time. An environment that selects a boundary face creates a logarithmically growing lag, while sustained selection toward an unattainable phenotype creates a lag proportional to the duration of the previous exposure.
+Thus the same convex-hull geometry that controls coexistence also controls how ecological history is stored in rare-strain abundances and later appears as a recovery lag.
 
 \section{Discussion}
 
-Phenotypic heterogeneity is often discussed as a way for populations to cope with variable or uncertain environments \cite{kussell2005,childs2010,villamartin2019}. The mechanism studied here is complementary but distinct from bet hedging. We do not ask which distribution of phenotypes maximizes long-term population growth, and we do not introduce stochastic switching to maintain diversity. Instead, we ask how adaptation to the current environment changes the abundance of existing phenotypic alternatives. The resulting composition is itself a memory of past exposure because it determines how rapidly the population can respond when conditions change.
+Resource competition provides a concrete biological realization of the response geometry. The vectors are not generic phenotypes: they are metabolic allocation strategies, the environmental target is the supplied resource composition, and the changing weights are strain frequencies. The convex-hull condition has an established ecological interpretation in models with metabolic trade-offs \cite{posfai2017,taillefumier2017,good2018}, while recent work has emphasized geometric descriptions of coexistence and ecosystem response more broadly \cite{blumenthal2023,goyal2025}. The result derived here concerns a different object: the transient abundance of strategies that are not needed in the current environment but may become important after the environment changes.
 
-The model gives a direct experimental prediction. A heterogeneous population can be exposed to a first environment for different durations $T$, then transferred to a second environment that favors a phenotype depleted during the first exposure. Measuring both the depleted fraction $p_i(T)$ and the time required for that phenotype to return to a fixed abundance would test the relation in Eq.~\eqref{eq:recovery-bound}. The theory predicts qualitatively different dependence on the first exposure time: bounded, logarithmic, or linear recovery according to whether the first environmental target lies in the interior, on the boundary, or outside the phenotypic repertoire.
+The model gives a direct experimental protocol. A microbial community containing strains with measured resource-use strategies can be maintained under a fixed mixture of substitutable carbon sources for different durations $T$, then transferred to a second mixture that favors a strain depleted during the first phase. The theory predicts that the dependence of the recovery lag on $T$ is controlled by whether the first supply lies inside, on the boundary of, or outside the convex hull of the available strategies. Time-dependent resource environments and metabolically adaptive communities are already natural extensions of consumer--resource theory \cite{pacciani2020}; here the emphasis is instead on the memory generated by composition change even when the individual strategies themselves are fixed.
 
-The present model deliberately keeps the phenotypic states fixed. It contains no mutation, spontaneous phenotype switching, or creation of new states, all of which can replenish depleted subpopulations in real biological systems. Its purpose is to isolate the geometric consequence of composition change alone. In that setting, adaptation to one environment can progressively remove the phenotypic variation required for the next, producing history-dependent adaptation times without introducing an additional memory variable.
+The deterministic model neglects mutation, immigration, and phenotypic switching. Any such process prevents arbitrarily small frequencies and will eventually cut off the asymptotic growth of the recovery lag. A weak replenishment rate therefore introduces a natural crossover: the $\log T$ and $T$ regimes hold while ecological depletion dominates, then saturate once the rare-strain abundance reaches the replenishment floor. This extension does not require a new memory variable; it regularizes the same ecological mechanism.
+
+The central prediction is therefore not that communities possess an abstract adaptability score. It is that prolonged resource selection changes the abundance of alternative metabolic strategies in a geometrically constrained way, and that these abundance tails determine how long the community takes to respond when the resource environment changes.
 
 \bibliographystyle{unsrtnat}
 \bibliography{refs}
