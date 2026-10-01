@@ -8,4 +8,5 @@ cd "$repo_root"
 git pull --ff-only
 
 cd draft
+latexmk -g -pdf -interaction=nonstopmode -halt-on-error -cd figures/fig1.tex
 latexmk -g -pdf -interaction=nonstopmode -halt-on-error main.tex
