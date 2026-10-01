@@ -14,7 +14,23 @@
 \title{Adaptive response geometry}
 \maketitle
 
-A system has a finite set of available responses and adapts to its environment by redistributing weight among them. This redistribution changes not only the realized response but also the variability that remains available for subsequent adaptation. We show that the covariance of the weighted repertoire acts directly as a response operator: its eigenvectors determine the directions in which the system can move and its eigenvalues determine the corresponding relaxation rates. Adaptation toward a restricted part of the repertoire concentrates the weights and suppresses some of these rates. After an environmental change, previously depleted responses therefore recover more slowly. The model makes this trade-off between present specialization and future response capacity explicit without introducing a separate measure of adaptability.
+A system has a finite set of possible responses $\{\mathbf a_i\}$. In an environment $\mathbf y$, it reallocates weight toward responses that reduce its present mismatch. The covariance
+\begin{equation*}
+\mathbf C
+=
+\sum_i
+p_i
+(\mathbf a_i-\mathbf r)
+(\mathbf a_i-\mathbf r)^{\mathsf T}
+\end{equation*}
+measures the directions in which the remaining repertoire can still move, because
+\begin{equation*}
+\dot{\mathbf r}
+=
+\mathbf C
+(\mathbf y-\mathbf r).
+\end{equation*}
+Adaptation therefore changes not only the current response but also the operator that determines subsequent adaptation. If the present environment favors only part of the repertoire, the weights concentrate there. The system can become better adapted to the present while $\mathbf C$ loses directions or develops small eigenvalues. After the environment changes, responses that were strongly suppressed then take longer to recover.
 
 \section{Results}
 
