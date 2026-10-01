@@ -1,5 +1,4 @@
 \documentclass[tikz,border=3pt]{standalone}
-
 \usepackage[T1]{fontenc}
 \usepackage{newtxtext,newtxmath}
 \let\Bbbk\relax
@@ -14,149 +13,105 @@
   line join=round,
   every node/.style={font=\small},
   target/.style={circle,draw,fill=white,inner sep=1.55pt},
+  state/.style={circle,fill,inner sep=1.25pt},
   hull/.style={thick},
   guide/.style={densely dashed},
-  flow/.style={->,thick}
+  velocity/.style={->,thick}
 ]
 
-\node at (1.45,7.78) {after exposure to $\mathbf y^-$ for time $T$};
-\node at (1.45,7.42) {dot size $\propto p_i(T)$};
-\node at (8.05,7.78) {same new target $\mathbf y^+$};
+\node at (1.55,3.45) {broad support};
+\node at (6.35,3.45) {specialized support};
 
-% shared coordinates inside each scope
-% P1=(0,0.45), P2=(1.65,0.18), P3=(2.75,0.92),
-% P4=(2.38,2.10), P5=(0.88,2.10), P6=(0.10,1.20)
+% ------------------------------------------------------------------
+% Broad support
+% ------------------------------------------------------------------
+\begin{scope}[xshift=0cm]
+  \coordinate (A1) at (0,0.4);
+  \coordinate (A2) at (1.8,0.2);
+  \coordinate (A3) at (2.8,0.8);
+  \coordinate (A4) at (2.8,2.1);
+  \coordinate (A5) at (1.0,2.35);
+  \coordinate (A6) at (0.1,1.3);
 
-% ================================================================
-% Interior history
-% ================================================================
-\begin{scope}[yshift=5.05cm]
-  \coordinate (P1) at (0,0.45);
-  \coordinate (P2) at (1.65,0.18);
-  \coordinate (P3) at (2.75,0.92);
-  \coordinate (P4) at (2.38,2.10);
-  \coordinate (P5) at (0.88,2.10);
-  \coordinate (P6) at (0.10,1.20);
-  \draw[hull] (P1)--(P2)--(P3)--(P4)--(P5)--(P6)--cycle;
-  \foreach \P in {P1,P2,P3,P4,P5,P6} \fill (\P) circle (1.9pt);
-  \node[anchor=west] at ($(P3)+(0.08,0)$) {$\mathbf a_3$};
-  \node at (0.72,1.55) {$\mathcal R$};
-  \coordinate (ym) at (1.55,1.30);
-  \node[target] at (ym) {};
-  \node[anchor=west] at ($(ym)+(0.10,0)$) {$\mathbf y^-$};
-  \node[anchor=east] at (-0.28,1.15) {interior};
+  \draw[hull] (A1)--(A2)--(A3)--(A4)--(A5)--(A6)--cycle;
+  \foreach \P in {A1,A2,A3,A4,A5,A6}
+    \fill (\P) circle (1.8pt);
 
-  \draw[flow] (3.20,1.15)--(5.05,1.15);
-  \node[align=center] at (4.12,1.66)
-    {$p_3(T)\to p_3^*>0$};
+  \node at (0.73,1.67) {$\mathcal R$};
 
-  \begin{scope}[xshift=5.55cm]
-    \coordinate (Q1) at (0,0.45);
-    \coordinate (Q2) at (1.65,0.18);
-    \coordinate (Q3) at (2.75,0.92);
-    \coordinate (Q4) at (2.38,2.10);
-    \coordinate (Q5) at (0.88,2.10);
-    \coordinate (Q6) at (0.10,1.20);
-    \draw[hull] (Q1)--(Q2)--(Q3)--(Q4)--(Q5)--(Q6)--cycle;
-    \foreach \Q in {Q1,Q2,Q3,Q4,Q5,Q6} \fill (\Q) circle (1.1pt);
-    \node[anchor=west] at ($(Q3)+(0.08,0)$) {$\mathbf a_3$};
-    \node at (0.72,1.55) {$\mathcal R$};
-    \coordinate (yp) at (2.20,1.02);
-    \node[target] at (yp) {};
-    \node[anchor=south west] at ($(yp)+(0.08,0.04)$) {$\mathbf y^+$};
-    \node at (1.38,-0.30) {$\tau_3(T)=O(1)$};
-  \end{scope}
+  \coordinate (r) at (1.42,1.19);
+  \coordinate (yp) at (0.62,1.19);
+
+  \draw[rotate around={11:(r)},thick]
+    (r) ellipse [x radius=0.78,y radius=0.52];
+  \node[anchor=south west] at (1.90,1.63) {$\mathbf C$};
+
+  \draw[guide] (r)--(yp);
+  \node[target] at (yp) {};
+  \node[anchor=north] at ($(yp)+(0,-0.09)$) {$\mathbf y^+$};
+
+  \draw[velocity] (r)--++(-0.78,-0.08);
+
+  \node[state] at (r) {};
+  \node[anchor=south] at ($(r)+(0,0.09)$) {$\mathbf r$};
+
+  \draw[->] (2.95,1.18)--++(0.58,0);
+  \node[anchor=west] at (3.55,1.18) {$\mathbf n$};
 \end{scope}
 
-% ================================================================
-% Boundary history
-% ================================================================
-\begin{scope}[yshift=2.42cm]
-  \coordinate (P1) at (0,0.45);
-  \coordinate (P2) at (1.65,0.18);
-  \coordinate (P3) at (2.75,0.92);
-  \coordinate (P4) at (2.38,2.10);
-  \coordinate (P5) at (0.88,2.10);
-  \coordinate (P6) at (0.10,1.20);
-  \draw[hull] (P1)--(P2)--(P3)--(P4)--(P5)--(P6)--cycle;
-  \fill (P4) circle (3.0pt);
-  \fill (P5) circle (3.0pt);
-  \foreach \P in {P1,P2,P6} \fill (\P) circle (0.75pt);
-  \fill (P3) circle (0.85pt);
-  \node[anchor=west] at ($(P3)+(0.08,0)$) {$\mathbf a_3$};
-  \node at (0.72,1.55) {$\mathcal R$};
-  \draw[line width=1.2pt] (P5)--(P4);
-  \coordinate (ym) at (1.68,2.10);
-  \node[target] at (ym) {};
-  \node[anchor=north east] at ($(ym)+(-0.08,-0.08)$) {$\mathbf y^-$};
-  \node[anchor=east] at (-0.28,1.15) {boundary};
+% ------------------------------------------------------------------
+% Specialized support
+% ------------------------------------------------------------------
+\begin{scope}[xshift=4.80cm]
+  \coordinate (B1) at (0,0.4);
+  \coordinate (B2) at (1.8,0.2);
+  \coordinate (B3) at (2.8,0.8);
+  \coordinate (B4) at (2.8,2.1);
+  \coordinate (B5) at (1.0,2.35);
+  \coordinate (B6) at (0.1,1.3);
 
-  \draw[flow] (3.20,1.15)--(5.05,1.15);
-  \node[align=center] at (4.12,1.66)
-    {$p_3(T)\asymp T^{-\alpha_3}$};
+  \draw[hull] (B1)--(B2)--(B3)--(B4)--(B5)--(B6)--cycle;
+  \fill (B1) circle (0.4pt);
+  \fill (B2) circle (0.4pt);
+  \fill (B3) circle (3.0pt);
+  \fill (B4) circle (3.0pt);
+  \fill (B5) circle (0.6pt);
+  \fill (B6) circle (0.6pt);
 
-  \begin{scope}[xshift=5.55cm]
-    \coordinate (Q1) at (0,0.45);
-    \coordinate (Q2) at (1.65,0.18);
-    \coordinate (Q3) at (2.75,0.92);
-    \coordinate (Q4) at (2.38,2.10);
-    \coordinate (Q5) at (0.88,2.10);
-    \coordinate (Q6) at (0.10,1.20);
-    \draw[hull] (Q1)--(Q2)--(Q3)--(Q4)--(Q5)--(Q6)--cycle;
-    \foreach \Q in {Q1,Q2,Q3,Q4,Q5,Q6} \fill (\Q) circle (1.1pt);
-    \node[anchor=west] at ($(Q3)+(0.08,0)$) {$\mathbf a_3$};
-    \node at (0.72,1.55) {$\mathcal R$};
-    \coordinate (yp) at (2.20,1.02);
-    \node[target] at (yp) {};
-    \node[anchor=south west] at ($(yp)+(0.08,0.04)$) {$\mathbf y^+$};
-    \node at (1.38,-0.30) {$\tau_3(T)=\Theta(\log T)$};
-  \end{scope}
+  \node at (0.73,1.67) {$\mathcal R$};
+
+  \draw[line width=1.3pt] (B3)--(B4);
+  \node[anchor=west] at (2.90,1.72) {$F$};
+
+  \coordinate (r) at (2.73,1.45);
+  \coordinate (yp) at (1.93,1.45);
+
+  \draw[thick] (r) ellipse [x radius=0.18,y radius=0.62];
+  \node[anchor=south east] at (2.58,2.01) {$\mathbf C$};
+
+  \draw[guide] (r)--(yp);
+  \node[target] at (yp) {};
+  \node[anchor=north] at ($(yp)+(0,-0.09)$) {$\mathbf y^+$};
+
+  \draw[velocity] (r)--++(-0.22,0);
+
+  \node[state] at (r) {};
+  \node[anchor=south east] at ($(r)+(-0.08,0.08)$) {$\mathbf r$};
+
+  \draw[->] (2.96,1.18)--++(0.58,0);
+  \node[anchor=west] at (3.56,1.18) {$\mathbf n$};
 \end{scope}
 
-% ================================================================
-% Exterior history
-% ================================================================
-\begin{scope}[yshift=-0.75cm]
-  \coordinate (P1) at (0,0.45);
-  \coordinate (P2) at (1.65,0.18);
-  \coordinate (P3) at (2.75,0.92);
-  \coordinate (P4) at (2.38,2.10);
-  \coordinate (P5) at (0.88,2.10);
-  \coordinate (P6) at (0.10,1.20);
-  \draw[hull] (P1)--(P2)--(P3)--(P4)--(P5)--(P6)--cycle;
-  \fill (P4) circle (3.2pt);
-  \fill (P5) circle (3.2pt);
-  \foreach \P in {P1,P2,P6} \fill (\P) circle (0.45pt);
-  \fill (P3) circle (0.45pt);
-  \node[anchor=west] at ($(P3)+(0.08,0)$) {$\mathbf a_3$};
-  \node at (0.72,1.55) {$\mathcal R$};
-  \coordinate (proj) at (1.68,2.10);
-  \coordinate (ym) at (1.68,2.72);
-  \draw[guide] (proj)--(ym);
-  \node[target] at (ym) {};
-  \node[anchor=south west] at ($(ym)+(0.08,0.04)$) {$\mathbf y^-$};
-  \node[anchor=east] at (-0.28,1.15) {exterior};
+% Compact legend
+\begin{scope}[yshift=-0.30cm]
+  \draw[guide] (1.30,0)--(1.85,0);
+  \node[anchor=west] at (1.94,0) {$\delta\mathbf y$};
 
-  \draw[flow] (3.20,1.15)--(5.05,1.15);
-  \node[align=center] at (4.12,1.66)
-    {$p_3(T)=e^{-\Delta_3T+o(T)}$};
+  \draw[velocity] (3.10,0)--(3.65,0);
+  \node[anchor=west] at (3.74,0) {$\delta\dot{\mathbf r}$};
 
-  \begin{scope}[xshift=5.55cm]
-    \coordinate (Q1) at (0,0.45);
-    \coordinate (Q2) at (1.65,0.18);
-    \coordinate (Q3) at (2.75,0.92);
-    \coordinate (Q4) at (2.38,2.10);
-    \coordinate (Q5) at (0.88,2.10);
-    \coordinate (Q6) at (0.10,1.20);
-    \draw[hull] (Q1)--(Q2)--(Q3)--(Q4)--(Q5)--(Q6)--cycle;
-    \foreach \Q in {Q1,Q2,Q3,Q4,Q5,Q6} \fill (\Q) circle (1.1pt);
-    \node[anchor=west] at ($(Q3)+(0.08,0)$) {$\mathbf a_3$};
-    \node at (0.72,1.55) {$\mathcal R$};
-    \coordinate (yp) at (2.20,1.02);
-    \node[target] at (yp) {};
-    \node[anchor=south west] at ($(yp)+(0.08,0.04)$) {$\mathbf y^+$};
-    \node at (1.38,-0.30) {$\tau_3(T)=\Theta(T)$};
-  \end{scope}
+  \fill (5.65,0) circle (2.0pt);
+  \node[anchor=west] at (5.78,0) {size $\propto p_i$};
 \end{scope}
 
 \end{tikzpicture}
