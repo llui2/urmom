@@ -9,46 +9,51 @@
 \usepackage[numbers]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
 
+\newenvironment{contextnote}
+{\par\medskip\noindent\hrulefill\par\smallskip\small}
+{\par\smallskip\noindent\hrulefill\par\medskip}
+
 \begin{document}
 
-\title{Adaptive response repertoires}
+\title{History-dependent adaptive response geometry}
 \maketitle
 
 \section{Results}
 
-The classical law of requisite variety relates successful regulation to the range of responses available to a regulator \cite{ashby1956}. A related idea appears in ecological response diversity, where components contributing to the same present function can differ in how they respond to environmental change \cite{elmqvist2003}. We start from the minimal continuous setting in which these ideas can be made geometric and dynamical.
+The law of requisite variety relates successful regulation to the range of responses available to a regulator \cite{ashby1956}. Related ideas appear in ecological response diversity \cite{elmqvist2003} and in multivariate evolutionary response, where a covariance matrix determines the directions along which selection can move a population \cite{lande1979}. Here we use a minimal adaptive model to make a different part of this picture explicit: adaptation changes the distribution of available responses, and therefore changes the geometry governing subsequent adaptation.
 
-\subsection{Response repertoire}
+\subsection{Adaptive response model}
 
-Consider a finite repertoire of $n$ response vectors
+Consider a finite repertoire of response vectors
 \begin{equation}
 \mathbf a_i\in\mathbb R^d,
-\qquad i=1,\ldots,n,
+\qquad
+i=1,\ldots,n,
 \end{equation}
-with nonnegative weights $p_i$ satisfying
+with nonnegative weights
 \begin{equation}
 p_i\geq0,
 \qquad
 \sum_i p_i=1.
 \label{eq:simplex}
 \end{equation}
-The realized response is the weighted mean
+The realized response is
 \begin{equation}
 \mathbf r
 =
 \sum_i p_i\mathbf a_i.
 \label{eq:response}
 \end{equation}
-The vectors $\mathbf a_i$ are fixed in the present model; adaptation only redistributes the available weight among them.
+The vectors $\mathbf a_i$ are fixed. Adaptation only redistributes weight among responses that are already available.
 
-Let $\mathbf y(t)\in\mathbb R^d$ denote the response required by the current environment and define the quadratic mismatch
+Let $\mathbf y(t)\in\mathbb R^d$ be the response required by the current environment and define
 \begin{equation}
 E
 =
 \frac12\|\mathbf r-\mathbf y\|^2.
 \label{eq:error}
 \end{equation}
-We let the weights descend this mismatch while remaining on the simplex. The natural multiplicative gradient flow on the simplex is the Shahshahani, or replicator, dynamics \cite{shahshahani1979},
+We let the weights descend this mismatch on the simplex using the Shahshahani, or replicator, gradient flow \cite{shahshahani1979},
 \begin{equation}
 \dot p_i
 =
@@ -58,9 +63,14 @@ We let the weights descend this mismatch while remaining on the simplex. The nat
 -
 \sum_jp_j\frac{\partial E}{\partial p_j}
 \right).
-\label{eq:replicator-gradient}
 \end{equation}
-Using Eq.~\eqref{eq:response}, this becomes
+Since
+\begin{equation}
+\frac{\partial E}{\partial p_i}
+=
+\mathbf a_i^{\mathsf T}(\mathbf r-\mathbf y),
+\end{equation}
+the adaptive law is
 \begin{equation}
 \dot p_i
 =
@@ -69,11 +79,9 @@ p_i
 (\mathbf y-\mathbf r).
 \label{eq:replicator}
 \end{equation}
-The overall adaptation rate has been absorbed into time. Equation~\eqref{eq:replicator} preserves Eq.~\eqref{eq:simplex} and leaves every boundary face invariant: a response with exactly zero weight is not recreated by redistribution alone.
+The overall adaptation rate has been absorbed into time. A response whose direction agrees with the current mismatch gains weight relative to the mean response.
 
-\subsection{Variety as a response operator}
-
-Define the weighted covariance of the response repertoire,
+Define the weighted covariance
 \begin{equation}
 \mathbf C
 =
@@ -82,25 +90,18 @@ Define the weighted covariance of the response repertoire,
 (\mathbf a_i-\mathbf r)^{\mathsf T}.
 \label{eq:covariance}
 \end{equation}
-Differentiating Eq.~\eqref{eq:response} and using Eq.~\eqref{eq:replicator} gives the exact closed relation
+Differentiating Eq.~\eqref{eq:response} gives the exact relation
 \begin{equation}
+\boxed{
 \dot{\mathbf r}
 =
-\mathbf C(\mathbf y-\mathbf r).
+\mathbf C(\mathbf y-\mathbf r)
+}.
 \label{eq:response-dynamics}
 \end{equation}
-Thus the covariance of the available responses is also the linear operator that converts mismatch into motion of the realized response.
+Thus the covariance of the currently represented responses is also the operator that converts environmental mismatch into adaptive motion.
 
-This gives the spectrum of $\mathbf C$ a direct dynamical meaning. If the system is initially matched, $\mathbf r_0=\mathbf y_0$, and the environment changes instantaneously by $\delta\mathbf y$, then
-\begin{equation}
-\dot{\mathbf r}(0^+)
-=
-\mathbf C_0\,\delta\mathbf y.
-\label{eq:linear-response}
-\end{equation}
-The eigenvectors of $\mathbf C_0$ are therefore the principal directions in which the repertoire can initially respond, while the eigenvalues set the corresponding response rates. A direction in $\ker\mathbf C$ cannot be generated by an infinitesimal redistribution of the present repertoire.
-
-For a fixed environment, Eq.~\eqref{eq:response-dynamics} also gives
+For a fixed environment,
 \begin{equation}
 \dot E
 =
@@ -110,143 +111,382 @@ For a fixed environment, Eq.~\eqref{eq:response-dynamics} also gives
 \leq0.
 \label{eq:error-decay}
 \end{equation}
-The same object therefore controls both the instantaneous capacity to respond to a change and the rate at which present mismatch can be removed.
+At a matched state, a small change $\delta\mathbf y$ gives to first order
+\begin{equation}
+\delta\dot{\mathbf r}
+=
+\mathbf C
+(\delta\mathbf y-\delta\mathbf r).
+\label{eq:linear-response}
+\end{equation}
+Hence the eigenvectors of $\mathbf C$ are the local directions of adaptation and its nonzero eigenvalues set the corresponding relaxation rates. The role of covariance as a response operator is classical in several settings; the point here is that $\mathbf C$ is itself changed by the same redistribution process that produces adaptation.
+
+\subsection{An exact history coordinate}
+
+The $n$ weights can be written in terms of a single $d$-dimensional history variable. Define
+\begin{equation}
+\boldsymbol\theta(t)
+=
+\int_0^t
+\left[
+\mathbf y(s)-\mathbf r(s)
+\right]
+\,\mathrm ds.
+\label{eq:theta}
+\end{equation}
+Integrating Eq.~\eqref{eq:replicator} gives
+\begin{equation}
+\boxed{
+p_i(t)
+=
+\frac{
+p_i(0)
+e^{\mathbf a_i^{\mathsf T}\boldsymbol\theta(t)}
+}{
+\sum_j
+p_j(0)
+e^{\mathbf a_j^{\mathsf T}\boldsymbol\theta(t)}
+}
+}.
+\label{eq:weights-solution}
+\end{equation}
+Introduce the log-partition function
+\begin{equation}
+\psi(\boldsymbol\theta)
+=
+\log
+\sum_i
+p_i(0)
+e^{\mathbf a_i^{\mathsf T}\boldsymbol\theta}.
+\label{eq:psi}
+\end{equation}
+Standard exponential-family identities then give \cite{amari2016}
+\begin{equation}
+\boxed{
+\mathbf r
+=
+\nabla\psi,
+\qquad
+\mathbf C
+=
+\nabla^2\psi
+}.
+\label{eq:gradient-hessian}
+\end{equation}
+The full dynamics therefore reduces exactly to
+\begin{equation}
+\boxed{
+\dot{\boldsymbol\theta}
+=
+\mathbf y(t)
+-
+\nabla\psi(\boldsymbol\theta)
+}.
+\label{eq:theta-dynamics}
+\end{equation}
+The environmental history does not enter through time itself, but through the accumulated mismatch $\boldsymbol\theta$. Once $\boldsymbol\theta$ is known, both the current response and the local response operator follow from the same convex function $\psi$.
+
+For a constant environment $\mathbf y$, Eq.~\eqref{eq:theta-dynamics} is the gradient flow
+\begin{equation}
+\dot{\boldsymbol\theta}
+=
+-\nabla V_{\mathbf y},
+\qquad
+V_{\mathbf y}(\boldsymbol\theta)
+=
+\psi(\boldsymbol\theta)
+-
+\mathbf y^{\mathsf T}\boldsymbol\theta.
+\label{eq:dual-potential}
+\end{equation}
+This makes the long-time behavior a geometric problem.
 
 \subsection{Reachable response geometry}
 
-Because the weights remain on the simplex, every realized response lies in the convex hull
+Because the weights remain on the simplex, the set of responses obtainable by redistribution is
 \begin{equation}
 \mathcal R
 =
 \operatorname{conv}
-\{\mathbf a_i:p_i(0)>0\}.
-\label{eq:reachable-set}
+\{\mathbf a_1,\ldots,\mathbf a_n\}.
+\label{eq:repertoire}
 \end{equation}
-The set $\mathcal R$ is the global repertoire available to redistribution. Exact matching of a fixed target is possible only when $\mathbf y\in\mathcal R$; otherwise every allocation obeys
-\begin{equation}
-E
-\geq
-\frac12\operatorname{dist}^2(\mathbf y,\mathcal R).
-\label{eq:distance-bound}
-\end{equation}
-This separates two notions that are often merged under the word variety. The convex set $\mathcal R$ determines which responses are representable at all, whereas $\mathbf C$ determines the local rate at which the current allocation can move through that set.
+The position of $\mathbf y$ relative to $\mathcal R$ separates three qualitatively different regimes.
 
-For the active repertoire, these two objects are linked exactly. Since $\mathbf C$ is positive semidefinite,
+\begin{contextnote}
+\textit{Geometric picture.}
+The convex hull $\operatorname{conv}\{\mathbf a_i\}$ is the set obtained by taking every weighted average of the response vectors with nonnegative weights that sum to one. In two dimensions it is the polygon whose corners are the outermost $\mathbf a_i$. Its relative interior means the interior inside the smallest affine space containing that polygon. A face is a boundary piece touched by a supporting line or hyperplane: an edge or a vertex in two dimensions, and their higher-dimensional analogues.
+\end{contextnote}
+
+If
 \begin{equation}
-\mathbf v^{\mathsf T}\mathbf C\mathbf v
-=
-\sum_i p_i
-\left[
-\mathbf v^{\mathsf T}(\mathbf a_i-\mathbf r)
-\right]^2.
-\label{eq:covariance-quadratic}
+\mathbf y\in\operatorname{relint}\mathcal R,
 \end{equation}
-Hence
+there is a finite $\boldsymbol\theta_*$ satisfying
 \begin{equation}
-\ker\mathbf C
+\nabla\psi(\boldsymbol\theta_*)
 =
-\left[
-\operatorname{span}
-\{\mathbf a_i-\mathbf r:p_i>0\}
-\right]^{\perp},
-\label{eq:kernel}
+\mathbf y.
+\end{equation}
+For positive initial weights, every response retains positive asymptotic weight and
+\begin{equation}
+\mathbf C(t)
+\longrightarrow
+\mathbf C_*
+=
+\nabla^2\psi(\boldsymbol\theta_*).
+\label{eq:interior-limit}
+\end{equation}
+On the affine span of the repertoire, $\mathbf C_*$ is nonsingular. Adaptation reaches the target without asymptotically suppressing a direction of the represented repertoire.
+
+The boundary is different. Let $\mathbf y$ lie in the relative interior of a proper face $F\subset\mathcal R$. Any finite $\boldsymbol\theta$ in Eq.~\eqref{eq:weights-solution} gives positive weight to every initially represented response and therefore places $\mathbf r$ in the relative interior of $\mathcal R$. Reaching a boundary target consequently requires
+\begin{equation}
+\|\boldsymbol\theta(t)\|
+\longrightarrow
+\infty,
+\end{equation}
+while the weights of responses outside $F$ vanish.
+
+For a codimension-one face, choose a unit normal $\mathbf n$ and $h$ such that
+\begin{equation}
+\mathbf n^{\mathsf T}\mathbf a_i
+=
+h
+\quad
+\text{for } \mathbf a_i\in F,
+\end{equation}
+and define the positive gaps
+\begin{equation}
+g_i
+=
+h-\mathbf n^{\mathsf T}\mathbf a_i
+>0
+\quad
+\text{for } \mathbf a_i\notin F.
+\label{eq:gaps}
+\end{equation}
+Let
+\begin{equation}
+g
+=
+\min_{\mathbf a_i\notin F}g_i.
+\end{equation}
+Writing
+\begin{equation}
+s(t)
+=
+\mathbf n^{\mathsf T}\boldsymbol\theta(t),
+\end{equation}
+the normal component of Eq.~\eqref{eq:theta-dynamics} is
+\begin{equation}
+\dot s
+=
+\mathbf n^{\mathsf T}(\mathbf y-\mathbf r)
+=
+\sum_{\mathbf a_i\notin F}
+p_i g_i.
+\label{eq:s-normal}
+\end{equation}
+Once the tangential coordinates have relaxed inside the face, Eq.~\eqref{eq:weights-solution} gives
+\begin{equation}
+p_i
+\asymp
+e^{-g_i s}
+\quad
+\text{outside }F.
+\label{eq:boundary-weight-s}
+\end{equation}
+The smallest gap dominates Eq.~\eqref{eq:s-normal}, so
+\begin{equation}
+\dot s
+\asymp
+e^{-gs},
+\qquad
+s(t)
+=
+\frac{1}{g}\log t+O(1).
+\label{eq:boundary-s}
+\end{equation}
+Consequently,
+\begin{equation}
+\boxed{
+p_i(t)
+\asymp
+t^{-g_i/g}
+}
+\label{eq:boundary-weights}
+\end{equation}
+for responses outside the selected face. In particular, the least-separated responses decay as $t^{-1}$.
+
+The same law appears directly in the response operator. Along the normal direction,
+\begin{equation}
+\mathbf n^{\mathsf T}\mathbf C\mathbf n
+=
+\operatorname{Var}_{p}
+\left(
+\mathbf n^{\mathsf T}\mathbf a
+\right),
 \end{equation}
 and therefore
 \begin{equation}
-\operatorname{rank}\mathbf C
-=
-\dim\operatorname{aff}
-\{\mathbf a_i:p_i>0\}.
-\label{eq:rank}
+\boxed{
+\mathbf n^{\mathsf T}\mathbf C(t)\mathbf n
+\asymp
+\frac{1}{t}
+}.
+\label{eq:boundary-capacity}
 \end{equation}
-The number of independent directions of immediate adaptation is exactly the affine dimension of the currently represented responses.
+Adaptation to a boundary target is exact, but it produces an algebraic loss of response capacity transverse to the face on which the target lies.
 
-\subsection{Adaptation reshapes response variety}
+\begin{contextnote}
+\textit{Why a face matters.}
+A face collects responses that are equally extreme in some direction $\mathbf n$. If the environment demands a point on that face, only mixtures of responses on the face are needed asymptotically. Responses lying behind it acquire smaller and smaller weights. The gap $g_i$ is simply their distance from the supporting hyperplane measured along $\mathbf n$.
+\end{contextnote}
 
-The response operator is itself changed by adaptation. Introduce the third central moment
+Finally, consider
 \begin{equation}
-T_{\alpha\beta\gamma}
-=
-\sum_i p_i
-(a_{i\alpha}-r_\alpha)
-(a_{i\beta}-r_\beta)
-(a_{i\gamma}-r_\gamma).
-\label{eq:third-moment}
+\mathbf y\notin\mathcal R.
 \end{equation}
-Differentiating Eq.~\eqref{eq:covariance}, the terms generated by the motion of the mean cancel, leaving
+The best achievable response is the Euclidean projection
 \begin{equation}
-\dot C_{\alpha\beta}
+\mathbf r_*
 =
-\sum_{\gamma}
-T_{\alpha\beta\gamma}
-(y_\gamma-r_\gamma).
-\label{eq:covariance-dynamics}
+\Pi_{\mathcal R}\mathbf y,
+\label{eq:projection}
 \end{equation}
-The current response is driven by the second moment of the repertoire, while the response operator is driven by its third moment. No monotonic law for total variety follows from the adaptation rule: depending on the shape of the repertoire relative to the environmental displacement, adaptation can increase some eigenvalues of $\mathbf C$ while decreasing others.
+and the residual
+\begin{equation}
+\mathbf e
+=
+\mathbf y-\mathbf r_*
+\end{equation}
+is normal to a supporting face of $\mathcal R$ at $\mathbf r_*$ \cite{rockafellar1970}. Since $\mathbf r(t)\to\mathbf r_*$,
+\begin{equation}
+\boldsymbol\theta(t)
+=
+\mathbf e\,t+o(t).
+\label{eq:outside-theta}
+\end{equation}
+Let
+\begin{equation}
+F_*
+=
+\operatorname*{arg\,max}_{\mathbf a_i}
+\mathbf e^{\mathsf T}\mathbf a_i
+\end{equation}
+be the exposed face selected by the residual mismatch. For a response outside this face define
+\begin{equation}
+\Delta_i
+=
+\mathbf e^{\mathsf T}
+(\mathbf r_*-\mathbf a_i)
+>0.
+\label{eq:external-gap}
+\end{equation}
+Equation~\eqref{eq:weights-solution} then gives
+\begin{equation}
+\boxed{
+p_i(t)
+=
+e^{-\Delta_i t+o(t)}
+}.
+\label{eq:outside-weights}
+\end{equation}
+An unattainable environment therefore suppresses unused response directions exponentially rather than algebraically.
 
-Equation~\eqref{eq:covariance-dynamics} also distinguishes representability from practical accessibility. For strictly positive initial weights, the deterministic dynamics does not remove a response in finite time, so the convex set $\mathcal R$ remains fixed. Nevertheless, weights can become arbitrarily small and the corresponding eigenvalues of $\mathbf C$ can collapse. The system can therefore retain a response globally while becoming increasingly slow at using it.
+The three regimes can be summarized as
+\begin{equation}
+\begin{array}{ccl}
+\mathbf y\in\operatorname{relint}\mathcal R
+&\Longrightarrow&
+\text{finite limiting response operator},
+\\[3pt]
+\mathbf y\in\partial\mathcal R
+&\Longrightarrow&
+\text{algebraic specialization},
+\\[3pt]
+\mathbf y\notin\mathcal R
+&\Longrightarrow&
+\text{exponential specialization}.
+\end{array}
+\label{eq:three-regimes}
+\end{equation}
 
-\subsection{Two-response limit}
+\subsection{Past specialization sets future recovery costs}
 
-The simplest case already shows this effect. Let the repertoire contain two responses $\mathbf a_1$ and $\mathbf a_2$, write
+The suppression laws above become measurable when the environment changes. Suppose the system is exposed to one environment until time $T$, after which the target changes to $\mathbf y^+$. Consider a response $i$ whose weight has become small. Under the new environment,
 \begin{equation}
-\mathbf d=\mathbf a_1-\mathbf a_2,
-\qquad
-p=p_1,
-\end{equation}
-and take a target on their affine line,
-\begin{equation}
-\mathbf y
+\frac{\mathrm d}{\mathrm dt}
+\log p_i
 =
-\mathbf a_2+q\mathbf d.
+(\mathbf a_i-\mathbf r)^{\mathsf T}
+(\mathbf y^+-\mathbf r).
+\label{eq:post-switch-growth}
 \end{equation}
-Then
+Assume that while $p_i$ grows from its value $p_i(T)$ to a fixed small threshold $\eta$, its growth advantage remains bounded,
 \begin{equation}
-\mathbf r
-=
-\mathbf a_2+p\mathbf d,
-\qquad
-\mathbf C
-=
-p(1-p)\mathbf d\mathbf d^{\mathsf T},
-\label{eq:two-covariance}
+0<\sigma_-
+\leq
+(\mathbf a_i-\mathbf r)^{\mathsf T}
+(\mathbf y^+-\mathbf r)
+\leq
+\sigma_+.
+\label{eq:growth-bounds}
 \end{equation}
-and Eq.~\eqref{eq:replicator} reduces to
+If $\tau_i(T)$ is the time required to reach $p_i=\eta$, integration of Eq.~\eqref{eq:post-switch-growth} gives
 \begin{equation}
-\dot p
-=
-\|\mathbf d\|^2
-p(1-p)(q-p).
-\label{eq:two-response}
+\boxed{
+\frac{1}{\sigma_+}
+\log\frac{\eta}{p_i(T)}
+\leq
+\tau_i(T)
+\leq
+\frac{1}{\sigma_-}
+\log\frac{\eta}{p_i(T)}
+}.
+\label{eq:recovery-bound}
 \end{equation}
-If $0<q<1$, the target requires a mixture and $p\to q$, leaving a finite response variance $q(1-q)\mathbf d\mathbf d^{\mathsf T}$. If the target coincides with an extreme response, for example $q=1$, then $p\to1$ and
-\begin{equation}
-\mathbf C\to0.
-\end{equation}
-Adaptation to an extreme environment therefore produces specialization and simultaneously removes the local response rate to subsequent changes, even though the unused response has not been deleted from the model.
+The cost of recovering a previously suppressed response is therefore set by how strongly the previous environment depleted it.
 
-For $q=1$, let $\varepsilon=1-p$. Near specialization,
+Combining Eq.~\eqref{eq:recovery-bound} with the long-time specialization laws gives
 \begin{equation}
-\dot\varepsilon
-\simeq
--\|\mathbf d\|^2\varepsilon^2,
+\boxed{
+\begin{array}{ccl}
+p_i(T)\to p_i^*>0
+&\Longrightarrow&
+\tau_i(T)=O(1),
+\\[3pt]
+p_i(T)\asymp T^{-\alpha_i}
+&\Longrightarrow&
+\tau_i(T)=\Theta(\log T),
+\\[3pt]
+p_i(T)=e^{-\Delta_iT+o(T)}
+&\Longrightarrow&
+\tau_i(T)=\Theta(T).
+\end{array}
+}
+\label{eq:recovery-scaling}
 \end{equation}
-so that
-\begin{equation}
-\varepsilon(t)
-\sim
-\frac{1}{\|\mathbf d\|^2t},
-\qquad
-\lambda_{\mathrm{resp}}(t)
-=
-p(1-p)\|\mathbf d\|^2
-\sim
-\frac{1}{t}.
-\label{eq:specialization-rate}
-\end{equation}
-Here $\lambda_{\mathrm{resp}}$ is the single nonzero eigenvalue of $\mathbf C$. Prolonged adaptation to the same extreme response thus produces an algebraic loss of responsiveness to changes along the only available direction. This gives a minimal calculable tension between present adaptation and retained response capacity without introducing a separate diversity or resilience score.
+Thus two environments that are both followed for a long time can leave qualitatively different memories in the same repertoire. Adaptation to an attainable boundary target creates a logarithmically growing recovery delay, whereas persistent forcing beyond the available repertoire creates a recovery delay proportional to the duration of the previous exposure.
 
-The present model stops at redistribution within a fixed repertoire. It therefore addresses the retention and accessibility of existing responses, not the creation of new response vectors. Any extension toward knowledge creation must add a mechanism that changes the repertoire itself; Eqs.~\eqref{eq:response-dynamics}--\eqref{eq:covariance-dynamics} provide the baseline against which such a mechanism can be measured.
+\begin{contextnote}
+\textit{Interpretation of the scaling.}
+Nothing has been deleted from the repertoire: every $p_i$ remains positive at finite time. The memory is instead stored in relative abundance. Recovering a rare response requires multiplying its weight back to an appreciable level. Polynomial suppression therefore costs only a logarithm of the previous exposure time, while exponential suppression turns the previous exposure time itself into a future recovery timescale.
+\end{contextnote}
+
+Equations~\eqref{eq:weights-solution}, \eqref{eq:boundary-weights}, \eqref{eq:outside-weights}, and \eqref{eq:recovery-scaling} give a direct chain from environmental history to future adaptation:
+\begin{equation}
+\boxed{
+\text{environmental history}
+\longrightarrow
+\boldsymbol\theta
+\longrightarrow
+\{p_i\},\,\mathbf C
+\longrightarrow
+\text{future recovery time}.
+}
+\end{equation}
+The fixed repertoire is essential to this result. The model describes selection and retention among existing responses, not the construction of new response vectors. It therefore provides a baseline for a later extension in which the repertoire itself can change.
 
 \bibliographystyle{unsrtnat}
 \bibliography{refs}
