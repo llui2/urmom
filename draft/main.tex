@@ -571,6 +571,16 @@ and therefore
 \Theta(T).
 \label{eq:outside-recovery}
 \end{equation}
+
+Figure~\ref{fig:history-recovery} summarizes how the same post-switch target can produce different recovery times because the first exposure leaves different weights at time $T$.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2}
+\caption{History-dependent recovery after an environmental switch. The left column shows the state after exposure to a previous target $\mathbf y^-$ for time $T$; marker size indicates the corresponding weight $p_i(T)$ schematically. The response $\mathbf a_3$ is used as a representative response required after switching to the same target $\mathbf y^+$ in all three rows. Interior exposure leaves $p_3(T)$ finite, boundary exposure suppresses it algebraically, and exterior exposure suppresses it exponentially. Under the growth condition in Eq.~\eqref{eq:growth-bounds}, these depletion laws give $O(1)$, $\Theta(\log T)$, and $\Theta(T)$ recovery times, respectively.}
+\label{fig:history-recovery}
+\end{figure}
+
 The duration of the first exposure therefore enters the later recovery time through the asymptotic depletion law of the required response. The recovery time is not an additional response metric: it is the first-passage time of the same adaptive dynamics after the target changes.
 
 The model contains no mechanism for creating new vectors $\mathbf a_i$. Its conclusions concern redistribution within a fixed response set and the dependence of later relaxation on that redistribution.
