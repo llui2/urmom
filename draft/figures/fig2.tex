@@ -13,6 +13,7 @@
   line join=round,
   every node/.style={font=\small},
   hull/.style={thick},
+  response/.style={circle,fill,inner sep=1.25pt},
   local/.style={draw,fill=black!7,line width=0.7pt}
 ]
 
@@ -29,12 +30,16 @@
 
   \draw[hull] (A1)--(A2)--(A3)--(A4)--(A5)--(A6)--cycle;
 
-  \draw[local] (1.55,1.35) ellipse [x radius=0.62,y radius=0.43];
-  \fill (1.55,1.35) circle (1.1pt);
+  \coordinate (rA) at (1.55,1.35);
+  \draw[local] (rA) ellipse [x radius=0.62,y radius=0.43];
+  \node[response] at (rA) {};
+  \node[anchor=north west] at ($(rA)+(0.08,-0.08)$) {$\mathbf r$};
+  \node[anchor=west] at (2.18,1.62) {$\mathbf C$};
 
   \foreach \P in {A1,A2,A3,A4,A5,A6}
     \fill (\P) circle (1.55pt);
 
+  \node[anchor=north west] at ($(A3)+(0.08,-0.04)$) {$\mathbf a_i$};
   \node at (0.82,1.70) {$\mathcal R$};
   \node at (1.53,-0.30) {broad support};
 \end{scope}
@@ -54,8 +59,11 @@
   \draw[line width=1.4pt] (B5)--(B4);
   \node[anchor=south] at (1.18,2.48) {$F$};
 
-  \draw[local] (1.80,2.12) ellipse [x radius=0.62,y radius=0.085];
-  \fill (1.80,2.12) circle (1.1pt);
+  \coordinate (rB) at (1.80,2.12);
+  \draw[local] (rB) ellipse [x radius=0.62,y radius=0.085];
+  \node[response] at (rB) {};
+  \node[anchor=north] at ($(rB)+(0,-0.10)$) {$\mathbf r$};
+  \node[anchor=west] at (2.35,1.88) {$\mathbf C$};
 
   \fill (B1) circle (0.50pt);
   \fill (B2) circle (0.50pt);
