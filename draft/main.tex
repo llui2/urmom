@@ -424,6 +424,15 @@ The points on $F$ share the same normal coordinate, while the closest points out
 \end{equation}
 The target is approached exactly, but the relaxation rate normal to the selected face vanishes algebraically.
 
+Figure~\ref{fig:covariance-response} illustrates the corresponding change in local response geometry. The dashed segment represents the same inward perturbation $\delta\mathbf y$ along $-\mathbf n$ in both panels. Immediately after the perturbation, $\delta\mathbf r=0$, so Eq.~\eqref{eq:linear-response} gives $\delta\dot{\mathbf r}=\mathbf C\delta\mathbf y$. When the weights are broadly distributed, $\mathbf C$ has finite extent along $\mathbf n$ and the response is appreciable. After concentration toward a face $F$, the covariance becomes thin in the normal direction and the same perturbation produces a much smaller response.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2}
+\caption{Covariance as a local response operator. Marker size represents the weights $p_i$ schematically. With broad support, the covariance $\mathbf C$ has finite extent along the chosen direction $\mathbf n$. After specialization toward a face $F$, the weights concentrate on that face and $\mathbf C$ becomes thin in the normal direction. The same inward perturbation $\delta\mathbf y$ therefore produces a smaller instantaneous response $\delta\dot{\mathbf r}=\mathbf C\delta\mathbf y$.}
+\label{fig:covariance-response}
+\end{figure}
+
 \subsection{Targets outside the response set}
 
 Now let
@@ -571,15 +580,6 @@ and therefore
 \Theta(T).
 \label{eq:outside-recovery}
 \end{equation}
-
-Figure~\ref{fig:history-recovery} summarizes how the same post-switch target can produce different recovery times because the first exposure leaves different weights at time $T$.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/fig2}
-\caption{History-dependent recovery after an environmental switch. The left column shows the state after exposure to a previous target $\mathbf y^-$ for time $T$; marker size indicates the corresponding weight $p_i(T)$ schematically. The response $\mathbf a_3$ is used as a representative response required after switching to the same target $\mathbf y^+$ in all three rows. Interior exposure leaves $p_3(T)$ finite, boundary exposure suppresses it algebraically, and exterior exposure suppresses it exponentially. Under the growth condition in Eq.~\eqref{eq:growth-bounds}, these depletion laws give $O(1)$, $\Theta(\log T)$, and $\Theta(T)$ recovery times, respectively.}
-\label{fig:history-recovery}
-\end{figure}
 
 The duration of the first exposure therefore enters the later recovery time through the asymptotic depletion law of the required response. The recovery time is not an additional response metric: it is the first-passage time of the same adaptive dynamics after the target changes.
 
