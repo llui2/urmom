@@ -18,3 +18,5 @@
 *.swo
 
 draft/main.pdf
+
+draft/figures/*.pdf
