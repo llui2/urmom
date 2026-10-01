@@ -15,97 +15,167 @@
 \title{History-dependent recovery in microbial resource competition}
 \maketitle
 
-Microbial strains competing for substitutable resources can coexist by dividing metabolic effort across different resource-use strategies. In a broad class of consumer--resource models, coexistence is controlled geometrically: the environmental resource supply must lie in the convex hull of the strategies present in the community \cite{macarthur1970,posfai2017,taillefumier2017,good2018}. We ask a dynamical question that is distinct from this equilibrium condition. If a community is exposed to one resource environment for a long time, how strongly are alternative strategies depleted, and how long does it take to recover when the resource supply changes?
+Microbial species competing for substitutable resources can coexist through differences in metabolic allocation. In resource-competition models with a finite enzyme budget, each species is represented by a resource-use strategy and the environmental supply can be represented in the same strategy space \cite{macarthur1970,posfai2017,taillefumier2017}. The position of the supply relative to the convex hull of the available strategies then determines which species can coexist. This geometry has been used to characterize steady states and transitions between ecological communities \cite{blumenthal2023,goyal2025}. Time-dependent resource supply has also been studied, with long environmental dwell times producing increasingly large population fluctuations and practical extinctions \cite{posfai2017}. We keep the resource strategies constitutive; dynamic within-species reallocation addresses a different mechanism and has been studied separately \cite{pacciani2020}.
 
-We consider fixed resource strategies $\boldsymbol\alpha_i$ with strain frequencies $p_i$ and normalized resource supply $\boldsymbol\beta$. The community-mean strategy is
-\begin{equation*}
-\bar{\boldsymbol\alpha}
-=
-\sum_i p_i \boldsymbol\alpha_i.
-\end{equation*}
-In the neutral fixed-strategy limit of substitutable-resource competition, the deterministic frequency dynamics can be written
-\begin{equation*}
-\dot p_i
-=
-p_i
-\left[
-\boldsymbol\alpha_i^{\mathsf T}
-\left(
-\boldsymbol\beta \oslash \bar{\boldsymbol\alpha}
-\right)
--1
-\right],
-\end{equation*}
-where $\oslash$ denotes componentwise division. This dynamics drives the community mean toward the resource supply while simultaneously changing the abundance of the strategies that make future responses possible. We show that the position of $\boldsymbol\beta$ relative to the convex hull of the available strategies gives three asymptotic regimes. Interior supplies preserve finite strain abundances, boundary supplies deplete off-face strains algebraically, and supplies outside the hull deplete them exponentially. After a switch in resource supply, these regimes produce recovery times $O(1)$, $\Theta(\log T)$, and $\Theta(T)$ as a function of the duration $T$ of the first exposure.
+Here we derive how the duration of one resource environment controls recovery after a switch. The result follows directly from the deterministic consumer--resource dynamics. Interior supply vectors preserve finite abundances of all initially present strategies. A nondegenerate codimension-one boundary supply depletes off-face strategies algebraically, while a supply outside the strategy hull depletes them exponentially. If a depleted species becomes favorable after the environment changes, its recovery time is therefore $O(1)$, $\Theta(\log T)$, or $\Theta(T)$ as a function of the duration $T$ of the first exposure. The distinction arises from the same convex geometry that controls coexistence, but concerns transient depletion and recovery rather than the steady state alone.
 
 \section{Results}
 
-\subsection{Resource competition dynamics}
+\subsection{Resource competition model}
 
-Consider $d$ substitutable resources. Strain $i$ is characterized by a normalized resource-use strategy
+Consider $d$ substitutable resources supplied at rates $s_k > 0$. Species $i$ allocates a fixed fraction $\alpha_{ik}$ of its metabolic budget to resource $k$, with
 \begin{equation}
-\boldsymbol\alpha_i
-\in
-\mathbb R^d,
-\qquad
 \alpha_{ik} > 0,
 \qquad
-\sum_{k=1}^d \alpha_{ik} = 1.
+\sum_{k=1}^{d} \alpha_{ik} = 1.
 \label{eq:strategy}
 \end{equation}
-The environment supplies the resources in proportions
+The strategy of species $i$ is denoted by $\boldsymbol\alpha_i$. This normalization represents the metabolic trade-off used in minimal consumer--resource models \cite{posfai2017,taillefumier2017}. We assume strictly positive strategy components throughout. Cases with unused resources can be treated after restricting the model to the active resource support.
+
+Let $n_i$ be the abundance of species $i$. In the fast-resource limit, resource concentrations relax much faster than population abundances. If $r_k$ denotes the uptake rate per unit allocation for resource $k$, resource balance gives
 \begin{equation}
-\boldsymbol\beta
-\in
-\mathbb R^d,
-\qquad
-\beta_k > 0,
-\qquad
-\sum_{k=1}^d \beta_k = 1.
-\label{eq:supply}
+s_k
+=
+r_k
+\sum_j
+n_j \alpha_{jk}.
+\label{eq:flux-balance}
 \end{equation}
-The strain frequencies satisfy
+With equal yields and a common death rate $\delta$, the growth rate of species $i$ is
+\begin{equation}
+g_i
+=
+\sum_k
+\alpha_{ik} r_k,
+\end{equation}
+and its abundance obeys
+\begin{equation}
+\dot n_i
+=
+n_i
+\left(
+g_i - \delta
+\right).
+\label{eq:abundance}
+\end{equation}
+This is the symmetric resource-competition limit considered in Refs.~\cite{posfai2017,good2018}.
+
+Define the total supply and total population by
+\begin{equation}
+S
+=
+\sum_k s_k,
+\qquad
+N
+=
+\sum_i n_i.
+\end{equation}
+Summing Eq.~\eqref{eq:abundance} and using Eq.~\eqref{eq:flux-balance} gives
+\begin{equation}
+\dot N
+=
+S - \delta N.
+\end{equation}
+Hence $N$ converges to $S / \delta$. More generally, the frequency dynamics is independent of this biomass transient up to a change of time. Let
+\begin{equation}
+p_i
+=
+\frac{n_i}{N},
+\qquad
+\beta_k
+=
+\frac{s_k}{S},
+\end{equation}
+so that
 \begin{equation}
 p_i \geq 0,
 \qquad
 \sum_i p_i = 1,
-\label{eq:simplex}
+\qquad
+\beta_k > 0,
+\qquad
+\sum_k \beta_k = 1.
 \end{equation}
-and the community-mean resource strategy is
+The community-mean strategy is
 \begin{equation}
 \bar{\boldsymbol\alpha}
 =
-\sum_i p_i \boldsymbol\alpha_i.
+\sum_i
+p_i \boldsymbol\alpha_i.
 \label{eq:mean-strategy}
 \end{equation}
-
-Consumer--resource models with a finite metabolic budget naturally lead to competition between such normalized strategies \cite{posfai2017,taillefumier2017}. In the fixed-strategy, equal-baseline-fitness limit used by Good, Martis, and Hallatschek, selection tunes the population-averaged uptake toward the environmental supply \cite{good2018}. We take the corresponding deterministic frequency dynamics
+Equation~\eqref{eq:flux-balance} gives
+\begin{equation}
+r_k
+=
+\frac{S}{N}
+\frac{\beta_k}{\bar\alpha_k},
+\end{equation}
+and therefore
+\begin{equation}
+\frac{\mathrm d p_i}{\mathrm d t}
+=
+\frac{S}{N}
+p_i
+\left(
+\sum_k
+\alpha_{ik}
+\frac{\beta_k}{\bar\alpha_k}
+-
+1
+\right).
+\end{equation}
+Introducing ecological time $\tau$ through $\mathrm d\tau / \mathrm dt = S / N$ removes the common prefactor. We use $\tau$ as the time variable below and write a dot for $\mathrm d / \mathrm d\tau$. The closed frequency dynamics is
 \begin{equation}
 \dot p_i
 =
 p_i
-\left[
-\sum_{k=1}^d
-\alpha_{ik}
-\frac{\beta_k}{\bar\alpha_k}
--1
-\right].
-\label{eq:resource-replicator}
-\end{equation}
-The simplex is invariant because
-\begin{equation}
-\sum_i p_i
+\left(
 \sum_k
 \alpha_{ik}
 \frac{\beta_k}{\bar\alpha_k}
-=
-\sum_k \beta_k
-=
-1.
+-
+1
+\right).
+\label{eq:resource-replicator}
 \end{equation}
-Thus Eq.~\eqref{eq:resource-replicator} changes only the relative abundance of the competing strategies.
+Since $N \to S / \delta$, ecological time is asymptotically proportional to physical time. The long-time exponents derived below are therefore unchanged by this reparametrization.
 
-The dynamics has a direct variational interpretation. Define the mismatch between the supplied and population-averaged resource compositions by
+Define the resource factors
+\begin{equation}
+q_k
+=
+\frac{\beta_k}{\bar\alpha_k},
+\end{equation}
+and the imbalance vector
+\begin{equation}
+\mathbf u
+=
+\mathbf q
+-
+\mathbf 1.
+\label{eq:imbalance}
+\end{equation}
+Since every strategy is normalized, Eq.~\eqref{eq:resource-replicator} becomes
+\begin{equation}
+\dot p_i
+=
+p_i
+\boldsymbol\alpha_i^{\mathsf T}
+\mathbf u.
+\label{eq:replicator-u}
+\end{equation}
+The mean strategy satisfies
+\begin{equation}
+\bar{\boldsymbol\alpha}^{\mathsf T}
+\mathbf u
+=
+0.
+\label{eq:mean-zero-growth}
+\end{equation}
+Therefore the simplex of frequencies is invariant, and a species with $p_i(0) > 0$ remains present at every finite time.
+
+The dynamics minimizes a natural mismatch between the supplied and consumed resource compositions. Define
 \begin{equation}
 E
 =
@@ -122,29 +192,31 @@ D_{\mathrm{KL}}
 \frac{\beta_k}{\bar\alpha_k}.
 \label{eq:kl}
 \end{equation}
-Then
+Its derivative with respect to the frequencies is
 \begin{equation}
 \frac{\partial E}{\partial p_i}
 =
 -
 \sum_k
 \alpha_{ik}
-\frac{\beta_k}{\bar\alpha_k},
+\frac{\beta_k}{\bar\alpha_k}.
 \end{equation}
-and Eq.~\eqref{eq:resource-replicator} is the Shahshahani gradient flow of $E$ on the frequency simplex \cite{shahshahani1979}.
+Equation~\eqref{eq:resource-replicator} is therefore the Shahshahani gradient flow of $E$ on the frequency simplex \cite{shahshahani1979}.
 
-Define the covariance of resource strategies
+Define the covariance of resource strategies,
 \begin{equation}
 \mathbf C
 =
 \sum_i
 p_i
 \left(
-\boldsymbol\alpha_i-
+\boldsymbol\alpha_i
+-
 \bar{\boldsymbol\alpha}
 \right)
 \left(
-\boldsymbol\alpha_i-
+\boldsymbol\alpha_i
+-
 \bar{\boldsymbol\alpha}
 \right)^{\mathsf T}.
 \label{eq:covariance}
@@ -154,64 +226,64 @@ Differentiating Eq.~\eqref{eq:mean-strategy} gives
 \dot{\bar{\boldsymbol\alpha}}
 =
 \mathbf C
-\left(
-\boldsymbol\beta
-\oslash
-\bar{\boldsymbol\alpha}
-\right).
-\end{equation}
-Because all strategy vectors are normalized,
-\begin{equation}
-\mathbf C \mathbf 1 = 0,
-\end{equation}
-so the same equation can be written as
-\begin{equation}
-\dot{\bar{\boldsymbol\alpha}}
-=
-\mathbf C
-\mathbf D
-\left(
-\bar{\boldsymbol\alpha}
-\right)^{-1}
-\left(
-\boldsymbol\beta
--
-\bar{\boldsymbol\alpha}
-\right),
+\mathbf u.
 \label{eq:mean-dynamics}
 \end{equation}
-where $\mathbf D(\bar{\boldsymbol\alpha})$ is the diagonal matrix with entries $\bar\alpha_k$. The covariance therefore appears directly in the ecological response law, but with the resource-dependent metric inherited from the consumer--resource dynamics.
-
-For fixed $\boldsymbol\beta$,
+The covariance therefore enters directly in the ecological response law. Since $\mathbf C \mathbf 1 = 0$, the KL mismatch decreases as
 \begin{equation}
 \dot E
 =
 -
-\left(
-\boldsymbol\beta
-\oslash
-\bar{\boldsymbol\alpha}
-\right)^{\mathsf T}
+\mathbf u^{\mathsf T}
 \mathbf C
-\left(
-\boldsymbol\beta
-\oslash
-\bar{\boldsymbol\alpha}
-\right)
-\leq 0.
+\mathbf u
+\leq
+0.
 \label{eq:kl-decay}
 \end{equation}
-Near a matched state $\bar{\boldsymbol\alpha}=\boldsymbol\beta$, the KL divergence has the quadratic expansion
+Near a matched state $\bar{\boldsymbol\alpha} = \boldsymbol\beta$, let
+\begin{equation}
+\mathbf D
+=
+\operatorname{diag}
+\left(
+\beta_1,
+\ldots,
+\beta_d
+\right).
+\end{equation}
+Then
+\begin{equation}
+\mathbf u
+=
+\mathbf D^{-1}
+\left(
+\boldsymbol\beta
+-
+\bar{\boldsymbol\alpha}
+\right)
++
+O
+\left(
+\|\bar{\boldsymbol\alpha}-\boldsymbol\beta\|^2
+\right),
+\label{eq:local-u}
+\end{equation}
+and
 \begin{equation}
 E
 =
 \frac12
 \left(
-\bar{\boldsymbol\alpha}-\boldsymbol\beta
+\bar{\boldsymbol\alpha}
+-
+\boldsymbol\beta
 \right)^{\mathsf T}
-\mathbf D(\boldsymbol\beta)^{-1}
+\mathbf D^{-1}
 \left(
-\bar{\boldsymbol\alpha}-\boldsymbol\beta
+\bar{\boldsymbol\alpha}
+-
+\boldsymbol\beta
 \right)
 +
 O
@@ -220,11 +292,20 @@ O
 \right).
 \label{eq:local-kl}
 \end{equation}
-Thus the quadratic response model arises locally from the consumer--resource mismatch rather than being imposed as a biological fitness function.
+The local response is therefore controlled by the strategy covariance in the resource metric set by the supply vector.
 
-\subsection{Geometry of the available resource strategies}
+\subsection{Convex geometry of the strategy space}
 
-The set of community-mean strategies attainable by changing strain frequencies is
+All strategies and supply vectors lie in the resource simplex
+\begin{equation}
+\mathcal H
+=
+\left\{
+\mathbf x \in \mathbb R^d:
+\mathbf 1^{\mathsf T}\mathbf x = 1
+\right\}.
+\end{equation}
+The set of mean strategies attainable by changing species frequencies is
 \begin{equation}
 \mathcal R
 =
@@ -236,162 +317,220 @@ The set of community-mean strategies attainable by changing strain frequencies i
 \right\}.
 \label{eq:repertoire}
 \end{equation}
-This convex-hull construction is already central to resource-competition models: when the normalized resource supply lies inside the hull of the available consumption strategies, coexistence can tune the community-average uptake to match the supply \cite{posfai2017,good2018}. Related geometric formulations have been developed for coexistence and perturbation response in more general consumer--resource systems \cite{blumenthal2023,goyal2025}.
+We assume that the strategies affinely span $\mathcal H$. If they span a lower-dimensional affine space, all statements below apply after restricting the model to that affine hull.
 
-Figure~\ref{fig:response-geometry} summarizes the three positions of the resource supply relative to the strategy hull.
+The position of the supply vector relative to $\mathcal R$ determines the long-time composition. This convex-hull condition is established in resource-competition models with metabolic trade-offs \cite{posfai2017,taillefumier2017}. Figure~\ref{fig:response-geometry} summarizes the three cases used below.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/fig1}
-\caption{Geometry of resource competition. Each point $\boldsymbol\alpha_i$ is a strain resource-use strategy, $\bar{\boldsymbol\alpha}$ is the current community mean, and $\boldsymbol\beta$ is the normalized resource supply. An interior supply can be matched by a mixture with broad support. A boundary supply lies on a face $F$, with $g_i$ measuring the separation of strategy $i$ from the supporting hyperplane. When the supply lies outside $\mathcal R$, the community converges to the KL projection $\bar{\boldsymbol\alpha}_*$ of $\boldsymbol\beta$ onto the attainable strategy set.}
+\caption{Geometry of resource competition. Each point $\boldsymbol\alpha_i$ is a resource-use strategy, $\bar{\boldsymbol\alpha}$ is the community mean, and $\boldsymbol\beta$ is the normalized resource supply. An interior supply can be matched by a composition with all species present. A codimension-one boundary supply lies on a face $F$, with $g_i$ measuring the separation of strategy $i$ from the supporting face. When the supply lies outside $\mathcal R$, the community converges to the KL projection $\bar{\boldsymbol\alpha}_*$ of $\boldsymbol\beta$ onto the attainable strategy set.}
 \label{fig:response-geometry}
 \end{figure}
 
-To analyze depletion of rare strains, introduce dual coordinates
+The frequency dynamics admits a useful dual representation. Define
 \begin{equation}
-\dot{\boldsymbol\theta}
+\boldsymbol\theta(t)
 =
-\boldsymbol\beta
-\oslash
-\bar{\boldsymbol\alpha}
+\int_0^t
+\mathbf u(s)
+\,\mathrm ds.
+\label{eq:theta}
+\end{equation}
+From Eq.~\eqref{eq:replicator-u}, the ratio of two frequencies satisfies
+\begin{equation}
+\frac{p_i(t)}{p_j(t)}
+=
+\frac{p_i(0)}{p_j(0)}
+\exp
+\left[
+\left(
+\boldsymbol\alpha_i
 -
-\mathbf 1.
-\label{eq:theta-dynamics}
-\end{equation}
-Equation~\eqref{eq:resource-replicator} then integrates to
-\begin{equation}
-p_i(t)
-=
-\frac{
-p_i(0)
-\exp
-\left[
-\boldsymbol\alpha_i^{\mathsf T}
+\boldsymbol\alpha_j
+\right)^{\mathsf T}
 \boldsymbol\theta(t)
-\right]
-}{
-\sum_j
-p_j(0)
-\exp
-\left[
-\boldsymbol\alpha_j^{\mathsf T}
-\boldsymbol\theta(t)
-\right]
-}.
-\label{eq:weights-solution}
+\right].
+\label{eq:frequency-ratio}
 \end{equation}
-This form makes the asymptotic distinction between interior, boundary, and exterior supplies explicit.
+Divergence of $\boldsymbol\theta$ therefore selects exposed faces of $\mathcal R$, while bounded dual coordinates preserve finite ratios among all species.
 
-\subsection{Interior resource supply}
+\subsection{Interior supplies preserve finite abundances}
 
-Suppose
+Let
 \begin{equation}
 \boldsymbol\beta
 \in
 \operatorname{relint}
 \mathcal R.
 \end{equation}
-Then there is a finite dual coordinate $\boldsymbol\theta_*$ for which
+The KL divergence in Eq.~\eqref{eq:kl} has minimum value zero on the set of compositions satisfying
 \begin{equation}
 \bar{\boldsymbol\alpha}
-\left(
-\boldsymbol\theta_*
-\right)
 =
 \boldsymbol\beta.
+\label{eq:matching}
 \end{equation}
-Starting from positive frequencies, Eq.~\eqref{eq:weights-solution} therefore converges to a finite composition with
+Because $E$ is convex in the frequencies and Eq.~\eqref{eq:resource-replicator} is its Shahshahani gradient flow, the mean strategy converges to this set.
+
+For positive initial frequencies, no frequency can vanish asymptotically while Eq.~\eqref{eq:matching} remains in the relative interior of $\mathcal R$. Indeed, any nontrivial divergence of the dual coordinate in Eq.~\eqref{eq:frequency-ratio} would concentrate the composition on a proper exposed face of $\mathcal R$, whose convex hull cannot contain an interior point. Hence $\boldsymbol\theta$ remains bounded modulo the irrelevant direction $\mathbf 1$, and
 \begin{equation}
 p_i(t)
 \to
-p_i^* > 0.
+p_i^*
+>
+0
+\qquad
+\text{for every } i.
 \label{eq:interior-frequencies}
 \end{equation}
-No strain is asymptotically depleted. The resource supply is matched without driving the community onto a lower-dimensional face of its strategy hull.
+The limiting composition depends on the initial condition when the representation of $\boldsymbol\beta$ is not unique, but all initially present strategies retain finite abundance.
 
-\subsection{Boundary supply and algebraic depletion}
+\subsection{Boundary supplies produce algebraic depletion}
 
-Now let $\boldsymbol\beta$ lie in the relative interior of a proper codimension-one face $F$ of $\mathcal R$. Choose a normal $\mathbf n$ and scalar $h$ such that
+Let $\boldsymbol\beta$ lie in the relative interior of a proper codimension-one face $F$ of $\mathcal R$. Since all points lie in $\mathcal H$, the supporting functional can be shifted by a multiple of $\mathbf 1$. We choose a normal $\mathbf n$ such that
 \begin{equation}
-\mathbf n^{\mathsf T}
-\boldsymbol\alpha_i
+F
 =
-h
+\left\{
+\mathbf x \in \mathcal R:
+\mathbf n^{\mathsf T}\mathbf x = 0
+\right\},
 \qquad
-\text{for }
-\boldsymbol\alpha_i \in F,
+\mathbf n^{\mathsf T}\mathbf x
+\leq
+0
+\quad
+\text{for every } \mathbf x \in \mathcal R.
+\label{eq:face}
 \end{equation}
-while
+For a strategy outside the face, define
 \begin{equation}
 g_i
 =
-h
 -
 \mathbf n^{\mathsf T}
 \boldsymbol\alpha_i
 >
-0
-\qquad
-\text{for }
-\boldsymbol\alpha_i \notin F.
+0.
 \label{eq:gap}
 \end{equation}
-Let
-\begin{equation}
-g
-=
-\min_{\boldsymbol\alpha_i\notin F}
-g_i.
-\end{equation}
+The supply itself satisfies $\mathbf n^{\mathsf T}\boldsymbol\beta = 0$.
 
-Matching a boundary supply requires the frequencies of strains outside $F$ to vanish. The dual coordinate therefore diverges in the exposed normal direction. Writing
+The long-time mean strategy converges to $\boldsymbol\beta$, while species outside $F$ are depleted. Define the total normal deficit
 \begin{equation}
-\boldsymbol\theta
+G
 =
-s\mathbf n
-+
-\boldsymbol\theta_{\parallel},
-\end{equation}
-with bounded tangential component gives from Eq.~\eqref{eq:weights-solution}
-\begin{equation}
-p_i
-\asymp
-\exp
-\left(
--g_i s
-\right)
-\qquad
-\text{for }
-\boldsymbol\alpha_i\notin F.
-\label{eq:boundary-weight-s}
-\end{equation}
-Near $\bar{\boldsymbol\alpha}=\boldsymbol\beta$, Eq.~\eqref{eq:theta-dynamics} becomes
-\begin{equation}
-\dot{\boldsymbol\theta}
-=
-\mathbf D(\boldsymbol\beta)^{-1}
+\mathbf n^{\mathsf T}
 \left(
 \boldsymbol\beta
 -
 \bar{\boldsymbol\alpha}
 \right)
-+
-O
-\left(
-\|\bar{\boldsymbol\alpha}-\boldsymbol\beta\|^2
-\right).
-\label{eq:theta-local}
+=
+\sum_{\boldsymbol\alpha_i \notin F}
+g_i p_i.
+\label{eq:G}
 \end{equation}
-The normal displacement is generated by the off-face strains and is of order $\exp(-gs)$. Hence, for a nondegenerate codimension-one face,
+The relevant boundary equilibrium is nonhyperbolic. Tangential perturbations within $F$ relax linearly, whereas the normal direction is marginal because every strategy has zero growth when $\bar{\boldsymbol\alpha} = \boldsymbol\beta$.
+
+Assume that the strategies on $F$ affinely span the face. The KL divergence restricted to the face has a positive-definite Hessian in the tangent directions, so tangential perturbations of the mean strategy relax linearly. Neutral redistributions of frequencies that leave the mean unchanged do not enter the mean-strategy dynamics. After quotienting these redundant composition directions, the only marginal mean direction is normal to $F$. The slow reduction therefore gives
+\begin{equation}
+\mathbf u
+=
+\lambda
+\mathbf n
++
+O(G^2).
+\label{eq:u-normal}
+\end{equation}
+Equation~\eqref{eq:local-u} gives
+\begin{equation}
+\boldsymbol\beta
+-
+\bar{\boldsymbol\alpha}
+=
+\mathbf D
+\mathbf u
++
+O(G^2).
+\end{equation}
+Taking the scalar product with $\mathbf n$ and using Eq.~\eqref{eq:G} gives
+\begin{equation}
+\lambda
+=
+\frac{G}{K}
++
+O(G^2),
+\qquad
+K
+=
+\mathbf n^{\mathsf T}
+\mathbf D
+\mathbf n
+>
+0.
+\label{eq:lambda}
+\end{equation}
+Hence the growth rate of an off-face species satisfies
+\begin{equation}
+\frac{\mathrm d}{\mathrm dt}
+\log p_i
+=
+-
+\frac{g_i}{K}
+G
++
+O(G^2).
+\label{eq:boundary-log-growth}
+\end{equation}
+
+Introduce the slow coordinate $s$ by
 \begin{equation}
 \dot s
-\asymp
+=
+\frac{G}{K}.
+\label{eq:s-dot}
+\end{equation}
+Equations~\eqref{eq:boundary-log-growth} and \eqref{eq:s-dot} give
+\begin{equation}
+p_i(t)
+=
+c_i
 \exp
 \left(
--gs
-\right).
+-g_i s(t)
+\right)
+\left[
+1 + o(1)
+\right],
+\qquad
+\boldsymbol\alpha_i \notin F,
+\label{eq:p-s}
 \end{equation}
-Integration gives
+with constants $c_i > 0$ fixed by the initial condition and the limiting tangential composition. Let
+\begin{equation}
+g
+=
+\min_{\boldsymbol\alpha_i \notin F}
+g_i.
+\label{eq:min-gap}
+\end{equation}
+Substituting Eq.~\eqref{eq:p-s} into Eq.~\eqref{eq:G} gives
+\begin{equation}
+\dot s
+=
+A
+\exp
+\left(
+-g s
+\right)
+\left[
+1 + o(1)
+\right],
+\label{eq:s-asymptotic}
+\end{equation}
+where $A > 0$. Integration yields
 \begin{equation}
 s(t)
 =
@@ -399,33 +538,38 @@ s(t)
 \log t
 +
 O(1),
+\label{eq:s-log}
 \end{equation}
 and therefore
 \begin{equation}
 p_i(t)
-\asymp
- t^{-g_i/g}.
+=
+c_i'
+t^{-g_i/g}
+\left[
+1 + o(1)
+\right].
 \label{eq:boundary-weights}
 \end{equation}
-In particular, the least-separated off-face strains decay as
-\begin{equation}
-p_i(t)
-\asymp
-\frac{1}{t}.
-\end{equation}
+The least-separated off-face strategies decay as $t^{-1}$. More distant strategies decay with larger powers fixed by their geometric gaps.
 
-The same depletion appears in the covariance normal to the selected face:
+The normal strategy covariance has the same slow scale. Since $\mathbf n^{\mathsf T}\boldsymbol\alpha_i = 0$ on $F$ and $-g_i$ off the face,
 \begin{equation}
 \mathbf n^{\mathsf T}
 \mathbf C(t)
 \mathbf n
-\asymp
-\frac{1}{t}.
+=
+\Theta
+\left(
+\frac{1}{t}
+\right).
 \label{eq:boundary-covariance}
 \end{equation}
-Thus the community can match a boundary supply, but only while progressively losing the resource strategies needed to move away from that face.
+Thus a boundary supply can be matched exactly, but the strategies required to move away from the selected face are progressively depleted.
 
-\subsection{Supply outside the strategy hull}
+The codimension-one assumption is part of this result. If $\boldsymbol\beta$ lies at the intersection of several faces, the linearization has several slow normal directions and Eq.~\eqref{eq:u-normal} becomes a vector reduction on the normal cone. The single exponent $g_i/g$ should then be replaced by the solution of the corresponding multi-normal asymptotic problem. Such higher-codimension supplies are nongeneric under a one-parameter change of the environment and are not included in Eq.~\eqref{eq:boundary-weights}.
+
+\subsection{Unattainable supplies produce exponential depletion}
 
 Suppose
 \begin{equation}
@@ -433,11 +577,11 @@ Suppose
 \notin
 \mathcal R.
 \end{equation}
-The community cannot match the supplied resource composition. Instead, the Lyapunov function in Eq.~\eqref{eq:kl} converges to its unique minimizer over the attainable set,
+The KL divergence is strictly convex in the positive mean strategy, so it has a unique minimizer over the compact convex set $\mathcal R$,
 \begin{equation}
 \bar{\boldsymbol\alpha}_*
 =
-\operatorname*{arg\,min}_{\mathbf x\in\mathcal R}
+\operatorname*{arg\,min}_{\mathbf x \in \mathcal R}
 D_{\mathrm{KL}}
 \left(
 \boldsymbol\beta
@@ -446,15 +590,22 @@ D_{\mathrm{KL}}
 \right).
 \label{eq:kl-projection}
 \end{equation}
+The gradient-flow structure implies
+\begin{equation}
+\bar{\boldsymbol\alpha}(t)
+\to
+\bar{\boldsymbol\alpha}_*.
+\end{equation}
+
 Define
 \begin{equation}
 \mathbf q_*
 =
 \boldsymbol\beta
 \oslash
-\bar{\boldsymbol\alpha}_*.
+\bar{\boldsymbol\alpha}_*,
 \end{equation}
-The first-order condition for the constrained minimum is
+where $\oslash$ denotes componentwise division. The first-order condition for Eq.~\eqref{eq:kl-projection} is
 \begin{equation}
 \mathbf q_*^{\mathsf T}
 \left(
@@ -465,9 +616,8 @@ The first-order condition for the constrained minimum is
 \leq
 0
 \qquad
-\text{for every }
-\mathbf x\in\mathcal R.
-\label{eq:kl-support}
+\text{for every } \mathbf x \in \mathcal R.
+\label{eq:projection-condition}
 \end{equation}
 Since
 \begin{equation}
@@ -476,19 +626,17 @@ Since
 =
 1,
 \end{equation}
-the limiting community lies on the exposed face
+the limiting mean lies on the exposed face
 \begin{equation}
 F_*
 =
 \left\{
-\boldsymbol\alpha_i:
-\mathbf q_*^{\mathsf T}
-\boldsymbol\alpha_i
-=
-1
+\mathbf x \in \mathcal R:
+\mathbf q_*^{\mathsf T}\mathbf x = 1
 \right\}.
+\label{eq:outside-face}
 \end{equation}
-For a strain outside this face, define its asymptotic disadvantage
+For any strategy outside $F_*$, define
 \begin{equation}
 \Delta_i
 =
@@ -500,41 +648,44 @@ For a strain outside this face, define its asymptotic disadvantage
 0.
 \label{eq:outside-gap}
 \end{equation}
-Equation~\eqref{eq:resource-replicator} gives
+Taking the long-time limit of Eq.~\eqref{eq:resource-replicator} gives
 \begin{equation}
 \frac{\mathrm d}{\mathrm dt}
 \log p_i
 \to
--\Delta_i,
+-
+\Delta_i.
 \end{equation}
-and therefore
+Hence
 \begin{equation}
 p_i(t)
 =
 \exp
 \left[
--\Delta_i t
+-
+\Delta_i t
 +
 o(t)
-\right].
+\right]
+\qquad
+\text{for }
+\boldsymbol\alpha_i \notin F_*.
 \label{eq:outside-weights}
 \end{equation}
-An unattainable supply composition therefore drives exponential depletion of strategies outside the limiting face.
+The distinction from the boundary case is therefore dynamical. At a matched boundary supply the invasion disadvantage vanishes asymptotically, producing algebraic depletion. For an unattainable supply the limiting disadvantage remains finite, producing exponential depletion.
 
 \subsection{Recovery after a resource switch}
 
-Apply a first resource supply $\boldsymbol\beta^-$ until time $T$, then switch to $\boldsymbol\beta^+$. Suppose strain $i$ was depleted during the first exposure and has positive invasion growth after the switch. Its instantaneous log-frequency growth is
+Apply a first supply $\boldsymbol\beta^-$ until time $T$, then switch to $\boldsymbol\beta^+$. Let species $i$ be depleted during the first phase and favorable after the switch. During the second phase its logarithmic growth rate is
 \begin{equation}
 \frac{\mathrm d}{\mathrm dt}
 \log p_i
 =
-\boldsymbol\alpha_i^{\mathsf T}
-\left(
-\boldsymbol\beta^+
-\oslash
-\bar{\boldsymbol\alpha}
-\right)
--1.
+\sum_k
+\alpha_{ik}
+\frac{\beta_k^+}{\bar\alpha_k}
+-
+1.
 \label{eq:post-switch-growth}
 \end{equation}
 Assume that while $p_i$ grows from $p_i(T)$ to a fixed threshold $\eta$, this rate satisfies
@@ -543,18 +694,13 @@ Assume that while $p_i$ grows from $p_i(T)$ to a fixed threshold $\eta$, this ra
 <
 \sigma_-
 \leq
-\boldsymbol\alpha_i^{\mathsf T}
-\left(
-\boldsymbol\beta^+
-\oslash
-\bar{\boldsymbol\alpha}
-\right)
--1
+\frac{\mathrm d}{\mathrm dt}
+\log p_i
 \leq
 \sigma_+.
 \label{eq:growth-bounds}
 \end{equation}
-If $\tau_i(T)$ is the first time after the switch at which $p_i=\eta$, then
+If $\tau_i(T)$ is the first time after the switch at which $p_i = \eta$, integration gives
 \begin{equation}
 \frac{1}{\sigma_+}
 \log
@@ -567,7 +713,7 @@ If $\tau_i(T)$ is the first time after the switch at which $p_i=\eta$, then
 \frac{\eta}{p_i(T)}.
 \label{eq:recovery-bound}
 \end{equation}
-The depletion law during the first environment therefore directly fixes the later recovery timescale.
+The depletion law generated by the first environment therefore fixes the recovery scale in the second.
 
 For an interior first supply, Eq.~\eqref{eq:interior-frequencies} gives
 \begin{equation}
@@ -575,7 +721,7 @@ For an interior first supply, Eq.~\eqref{eq:interior-frequencies} gives
 =
 O(1).
 \end{equation}
-For a boundary supply, Eq.~\eqref{eq:boundary-weights} gives
+For a nondegenerate codimension-one boundary supply, Eq.~\eqref{eq:boundary-weights} gives
 \begin{equation}
 \tau_i(T)
 =
@@ -585,24 +731,62 @@ For a boundary supply, Eq.~\eqref{eq:boundary-weights} gives
 \right).
 \label{eq:boundary-recovery}
 \end{equation}
-For a first supply outside the strategy hull, Eq.~\eqref{eq:outside-weights} gives
+For an unattainable first supply, Eq.~\eqref{eq:outside-weights} gives
 \begin{equation}
 \tau_i(T)
 =
 \Theta(T).
 \label{eq:outside-recovery}
 \end{equation}
-Thus the same convex-hull geometry that controls coexistence also controls how ecological history is stored in rare-strain abundances and later appears as a recovery lag.
+The exposure duration is therefore encoded in the abundance of strategies that are unnecessary in the first environment but useful in the second.
 
-\section{Discussion}
+This prediction sharpens an effect already visible in fluctuating-resource models. Posfai et al. found that longer intervals between environmental changes increase population fluctuations and can drive species below a practical extinction threshold even when deterministic coexistence is possible \cite{posfai2017}. Equations~\eqref{eq:boundary-recovery} and \eqref{eq:outside-recovery} identify the asymptotic depletion mechanism and the resulting recovery timescale for a single prolonged exposure followed by a switch.
 
-Resource competition provides a concrete biological realization of the response geometry. The vectors are not generic phenotypes: they are metabolic allocation strategies, the environmental target is the supplied resource composition, and the changing weights are strain frequencies. The convex-hull condition has an established ecological interpretation in models with metabolic trade-offs \cite{posfai2017,taillefumier2017,good2018}, while recent work has emphasized geometric descriptions of coexistence and ecosystem response more broadly \cite{blumenthal2023,goyal2025}. The result derived here concerns a different object: the transient abundance of strategies that are not needed in the current environment but may become important after the environment changes.
+\subsection{Weak replenishment cuts off long-exposure recovery}
 
-The model gives a direct experimental protocol. A microbial community containing strains with measured resource-use strategies can be maintained under a fixed mixture of substitutable carbon sources for different durations $T$, then transferred to a second mixture that favors a strain depleted during the first phase. The theory predicts that the dependence of the recovery lag on $T$ is controlled by whether the first supply lies inside, on the boundary of, or outside the convex hull of the available strategies. Time-dependent resource environments and metabolically adaptive communities are already natural extensions of consumer--resource theory \cite{pacciani2020}; here the emphasis is instead on the memory generated by composition change even when the individual strategies themselves are fixed.
+The deterministic model contains no mutation or immigration. A weak source of depleted strategies prevents the normal deficit from becoming arbitrarily small. Suppose off-face species receive a total influx of order $\mu$ from abundant backgrounds.
 
-The deterministic model neglects mutation, immigration, and phenotypic switching. Any such process prevents arbitrarily small frequencies and will eventually cut off the asymptotic growth of the recovery lag. A weak replenishment rate therefore introduces a natural crossover: the $\log T$ and $T$ regimes hold while ecological depletion dominates, then saturate once the rare-strain abundance reaches the replenishment floor. This extension does not require a new memory variable; it regularizes the same ecological mechanism.
+For a codimension-one boundary supply, Eqs.~\eqref{eq:G}, \eqref{eq:s-dot}, and \eqref{eq:s-asymptotic} give
+\begin{equation}
+\dot G
+=
+-
+a G^2
++
+o(G^2),
+\qquad
+a > 0,
+\label{eq:G-quadratic}
+\end{equation}
+along the unforced slow manifold. A persistent influx of order $\mu$ therefore balances depletion when
+\begin{equation}
+G
+=
+O
+\left(
+\sqrt{\mu}
+\right).
+\label{eq:boundary-floor}
+\end{equation}
+The distribution of this floor among individual least-gap species depends on the mutation or immigration network, but the collective normal deficit cannot continue to follow the deterministic $t^{-1}$ law beyond this scale.
 
-The central prediction is therefore not that communities possess an abstract adaptability score. It is that prolonged resource selection changes the abundance of alternative metabolic strategies in a geometrically constrained way, and that these abundance tails determine how long the community takes to respond when the resource environment changes.
+For a supply outside the hull, off-face species retain finite disadvantages $\Delta_i$. A species that receives an influx of order $\mu$ satisfies locally
+\begin{equation}
+\dot p_i
+=
+-
+\Delta_i p_i
++
+O(\mu),
+\end{equation}
+so its abundance floor is
+\begin{equation}
+p_i
+=
+O(\mu).
+\label{eq:outside-floor}
+\end{equation}
+Equation~\eqref{eq:recovery-bound} then implies that the growth of the recovery time with $T$ stops once the corresponding replenishment floor is reached. In a finite population, the same deterministic laws apply only while the predicted abundance remains above the stochastic extinction scale. This is the regime in which long environmental dwell times can turn deterministic coexistence into practical loss of a species \cite{posfai2017}.
 
 \bibliographystyle{unsrtnat}
 \bibliography{refs}
