@@ -424,12 +424,12 @@ The points on $F$ share the same normal coordinate, while the closest points out
 \end{equation}
 The target is approached exactly, but the relaxation rate normal to the selected face vanishes algebraically.
 
-Figure~\ref{fig:covariance-response} illustrates the corresponding change in local response geometry. The dashed segment represents the same inward perturbation $\delta\mathbf y$ along $-\mathbf n$ in both panels. Immediately after the perturbation, $\delta\mathbf r=0$, so Eq.~\eqref{eq:linear-response} gives $\delta\dot{\mathbf r}=\mathbf C\delta\mathbf y$. When the weights are broadly distributed, $\mathbf C$ has finite extent along $\mathbf n$ and the response is appreciable. After concentration toward a face $F$, the covariance becomes thin in the normal direction and the same perturbation produces a much smaller response.
+Figure~\ref{fig:covariance-response} gives a geometric view of the same change in response capacity. When the weights are distributed across responses spanning $\mathcal R$, the covariance has finite extent in both directions. As adaptation concentrates weight on a face $F$, the local covariance geometry collapses toward directions tangent to that face. The normal response capacity is therefore progressively suppressed, consistent with Eq.~\eqref{eq:boundary-capacity}.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/fig2}
-\caption{Covariance as a local response operator. Marker size represents the weights $p_i$ schematically. With broad support, the covariance $\mathbf C$ has finite extent along the chosen direction $\mathbf n$. After specialization toward a face $F$, the weights concentrate on that face and $\mathbf C$ becomes thin in the normal direction. The same inward perturbation $\delta\mathbf y$ therefore produces a smaller instantaneous response $\delta\dot{\mathbf r}=\mathbf C\delta\mathbf y$.}
+\caption{Support concentration reshapes local response geometry. Marker size represents the weights $p_i$, while the gray shapes schematically indicate the local covariance geometry. With broad support, the response remains extended in both directions. After specialization toward a face $F$, the weights concentrate on that face and the covariance becomes nearly tangent to it, suppressing response capacity in the normal direction.}
 \label{fig:covariance-response}
 \end{figure}
 
