@@ -9,75 +9,42 @@
 
 \begin{document}
 
-\title{Frequency-dependent fitness reshapes evolutionary accessibility on genotype space}
+\title{Frequency-dependent fitness on genotype space}
 \maketitle
 
-\section{Idea}
-
-A genotype does not need to have one fixed fitness value. Its fitness can depend on which other genotypes are currently present in the population.
-
-We study this in the simplest possible setting. Genotypes are binary sequences. Mutation connects sequences that differ by one bit. Each genotype has an intrinsic fitness, but the current population adds a second, frequency-dependent contribution to fitness.
-
-The main question is:
-
-\begin{quote}
-How does frequency-dependent fitness coupling change which mutational paths are accessible?
-\end{quote}
-
-This is not mainly a coexistence problem, and the matrix below should not be read as a generic ecological interaction matrix. It is a \emph{fitness-coupling matrix}: it tells us how the frequency of one genotype changes the fitness of another.
+A genotype fitness landscape assigns an intrinsic fitness $g_i$ to each genotype. This description is incomplete when the selective value of a genotype depends on the current population. We consider a minimal model in which mutation follows an explicit genotype graph while population composition changes relative fitness through a coupling matrix $A$. The aim is to determine when this feedback changes the mutational routes favored by selection.
 
 \section{Model}
 
-Let
-\[
-x_i\in\{0,1\}^L,
-\qquad
-i=1,\ldots,N,
-\qquad
-N=2^L,
-\]
-be the genotypes, and let $p_i$ be their population frequencies,
-\[
-p_i\geq 0,
-\qquad
-\sum_i p_i=1.
-\]
-
-Mutation follows the geometry of the hypercube. We use
-\[
-Q_{ii}=1-\mu,
-\qquad
-Q_{ij}=\frac{\mu}{L}
-\quad\text{if}\quad
-d_H(x_i,x_j)=1,
-\]
-and $Q_{ij}=0$ otherwise.
-
-Each genotype has an intrinsic fitness $g_i$. The effective fitness is
+Consider binary genotypes $x_i \in \{0,1\}^L$, with frequencies $p_i \geq 0$ and $\sum_i p_i = 1$. Mutation connects genotypes at Hamming distance one. With mutation probability $\mu$, the mutation matrix is
 \begin{equation}
-f_i(\mathbf p)
+Q_{ii} = 1 - \mu,
+\qquad
+Q_{ij} = \frac{\mu}{L}
+\quad \text{if} \quad
+d_H(x_i,x_j) = 1,
+\end{equation}
+and $Q_{ij} = 0$ otherwise.
+
+The effective fitness of genotype $i$ is
+\begin{equation}
+f_i(p)
 =
 g_i
 +
-\beta
-\sum_j A_{ij}p_j.
+\beta \sum_j A_{ij} p_j.
 \label{eq:fitness}
 \end{equation}
+Here $g_i$ is the intrinsic fitness and $A_{ij}$ measures how the frequency of genotype $j$ changes the fitness of genotype $i$. We therefore refer to $A$ as a fitness-coupling matrix.
 
-The matrix $A$ is the key object. Its entry $A_{ij}$ means:
-
-\begin{quote}
-how the frequency of genotype $j$ changes the fitness of genotype $i$.
-\end{quote}
-
-Selection acts through
+Selection acts according to
 \begin{equation}
 \widetilde p_i
 =
 \frac{
-p_i \exp\!\left(\eta f_i(\mathbf p)\right)
+p_i \exp[\eta f_i(p)]
 }{
-\sum_k p_k \exp\!\left(\eta f_k(\mathbf p)\right)
+\sum_k p_k \exp[\eta f_k(p)]
 },
 \label{eq:selection}
 \end{equation}
@@ -85,162 +52,76 @@ followed by mutation,
 \begin{equation}
 p_i(t+1)
 =
-\sum_j
-\widetilde p_j Q_{ji}.
+\sum_j \widetilde p_j Q_{ji}.
 \label{eq:mutation}
 \end{equation}
 
-So the model contains three separate objects:
-\[
-\boxed{
-\mathbf g
-\quad\text{intrinsic fitness},
-\qquad
-A
-\quad\text{frequency-dependent fitness coupling},
-\qquad
-Q
-\quad\text{mutation geometry}.
-}
-\]
+The vector $g$, the matrix $A$, and the mutation operator $Q$ play distinct roles. The vector $g$ defines the intrinsic landscape, $Q$ defines which mutational moves are possible, and $A$ changes the relative selective value of those moves as the population changes.
 
-\section{What the matrix changes}
+\section{Relative fitness and local accessibility}
 
-Selection only depends on fitness differences. Between genotypes $i$ and $k$,
+Only fitness differences enter the selection step. For two genotypes $i$ and $k$,
 \begin{equation}
-f_i-f_k
+f_i(p) - f_k(p)
 =
-g_i-g_k
+g_i - g_k
 +
-\beta
-\sum_j
-(A_{ij}-A_{kj})p_j.
+\beta \sum_j
+(A_{ij} - A_{kj}) p_j.
 \label{eq:relative-fitness}
 \end{equation}
+The first term is fixed by the intrinsic landscape, while the second depends on population composition.
 
-The first term is the difference in the underlying fitness landscape. The second term depends on the current population.
-
-This means that the sign of selection can change while the intrinsic landscape stays fixed.
-
-Consider a population concentrated at genotype $i$. A one-step mutant $j$ appears through $Q$. Its initial selective advantage is
+Consider a population concentrated at genotype $i$ and a rare one-step mutant $j$. Before mutation mixing, the ratio $p_j/p_i$ is multiplied during selection by
 \begin{equation}
-s_{j|i}
-=
-g_j-g_i
-+
-\beta
+\exp\left[
+\eta
 \left(
-A_{ji}-A_{ii}
-\right).
+g_j - g_i
++
+\beta (A_{ji} - A_{ii})
+\right)
+\right].
+\end{equation}
+The mutant therefore increases relative to the resident during the selection step when
+\begin{equation}
+g_j - g_i
++
+\beta (A_{ji} - A_{ii})
+>
+0.
 \label{eq:invasion}
 \end{equation}
 
-Without frequency-dependent coupling, the mutant is unfavorable when
-\[
-g_j-g_i<0.
-\]
+Equation~\eqref{eq:invasion} gives a local notion of accessibility in the rare-mutant limit. Mutation creates the mutant through $Q$, while the fitness coupling changes its selective effect after it appears. A step with $g_j < g_i$ can therefore become favorable in the population created by genotype $i$.
 
-With coupling, the same mutant can become favorable when
-\[
-g_j-g_i
-+
-\beta(A_{ji}-A_{ii})
->0.
-\]
+The matrix $A$ also contains a redundant component. Replacing
+\begin{equation}
+A
+\longrightarrow
+A + \mathbf{1} v^{\mathsf T}
+\end{equation}
+adds the same quantity $v^{\mathsf T}p$ to every genotype fitness and leaves Eq.~\eqref{eq:relative-fitness} unchanged. The dynamics therefore depends on differences between rows of $A$, not on all matrix entries independently.
 
-The matrix $A$ does not create the mutation. The mutation operator $Q$ does that. The role of $A$ is to change what selection does with the mutant after it appears.
+\section{Minimal problem}
 
-\begin{quote}
-Mutation determines which moves are possible. Intrinsic fitness gives their baseline value. Population-dependent fitness coupling can change which of those moves are favored.
-\end{quote}
+We first consider a rugged intrinsic landscape with a local peak and a higher peak elsewhere. Starting near the local peak, the baseline dynamics with $\beta = 0$ determines the mutational routes favored by the intrinsic landscape. We then introduce a low-dimensional family of fitness couplings and determine when Eq.~\eqref{eq:invasion} changes those routes.
 
-\section{Evolutionary accessibility}
-
-For a fixed intrinsic landscape, define a directed edge
-\[
-i\longrightarrow j
-\]
-when $d_H(x_i,x_j)=1$ and the mutant $j$ can initially invade the resident $i$.
-
-Without coupling,
-\[
-i\longrightarrow j
-\qquad\Longleftrightarrow\qquad
-g_j-g_i>0.
-\]
-
-With coupling,
-\[
-i\longrightarrow j
-\qquad\Longleftrightarrow\qquad
-g_j-g_i+\beta(A_{ji}-A_{ii})>0.
-\]
-
-The accessibility graph therefore depends on the fitness-coupling structure.
-
-The basic problem is to understand when increasing $\beta$, changing the structure of $A$, or changing the ruggedness of $\mathbf g$ opens or closes evolutionary routes.
-
-Examples of questions are:
-\begin{itemize}
-\item Can a population escape a local fitness peak that traps it when $\beta=0$?
-\item When does a previously accessible path disappear?
-\item Can frequency dependence create persistent polymorphism instead of a single path?
-\item Which simple properties of $A$ control these changes?
-\end{itemize}
-
-\section{Why this is not just a Lotka--Volterra interaction matrix}
-
-A generalized Lotka--Volterra model usually evolves absolute abundances and writes interactions directly in the per-capita growth rates.
-
-Here the state is a frequency vector on a fixed genotype space, mutation explicitly connects nearby genotypes, and $A$ is used only to modify relative fitness before mutation and selection.
-
-There is also a simple redundancy. If
-\[
-A'
-=
-A+\mathbf 1\mathbf v^{\mathsf T},
-\]
-then every genotype receives the same extra fitness
-\[
-\mathbf v^{\mathsf T}\mathbf p.
-\]
-This cancels from relative selection. Therefore only differences between rows of $A$ affect the dynamics.
-
-The relevant object is not every entry of $A$ separately, but how $A$ changes relative fitness on the simplex.
-
-\section{First setup}
-
-The first version should stay small and transparent.
-
-\begin{enumerate}
-\item Use binary genotype space with nearest-neighbor mutation.
-\item Choose a rugged intrinsic fitness landscape with a clear local peak and a higher peak elsewhere.
-\item Start the population near the local peak.
-\item Prescribe a simple low-dimensional family of fitness-coupling matrices $A$.
-\item Vary the coupling strength $\beta$.
-\item Measure which mutational edges become accessible and whether the population escapes the local peak.
-\end{enumerate}
-
-The first pass should not optimize entropy or learn a completely free $N\times N$ matrix. The earlier entropy objective naturally pushed the system toward a nearly uniform diversity-preserving solution. Here diversity is an output, not the target.
-
-A useful simple family is to make coupling depend on Hamming distance,
-\[
+A simple first family is
+\begin{equation}
 A_{ij}
 =
-a_{d_H(x_i,x_j)}.
-\]
-This respects the same genotype geometry as mutation and is analytically tractable. More structured or asymmetric coupling can be introduced later if directional rerouting is needed.
+a_{d_H(x_i,x_j)},
+\label{eq:radial-coupling}
+\end{equation}
+where the coupling depends only on genetic distance. This keeps mutation and fitness coupling on the same genotype geometry and reduces the number of free coupling parameters from $O(4^L)$ to $O(L)$.
+
+The first quantities to measure are the locally favorable mutational edges, escape from intrinsic local peaks, the resulting population trajectory, and their dependence on $\beta$, landscape ruggedness, and the coefficients $a_d$. Diversity is treated as an outcome of the dynamics rather than an optimization objective.
 
 \section{Mathematical direction}
 
-When $A$ depends only on Hamming distance, both mutation and fitness coupling respect the symmetry of the hypercube. They can then be decomposed into the same Walsh modes.
+For the distance-dependent family in Eq.~\eqref{eq:radial-coupling}, both mutation and fitness coupling respect the symmetries of the hypercube and can be represented in the Walsh basis. This gives a complementary description in which mutation and frequency-dependent fitness act on the same genotype-space modes.
 
-This gives two complementary descriptions of the same system:
-\begin{enumerate}
-\item a local accessibility picture, where interactions open and close mutational edges;
-\item a spectral picture, where mutation damps genotype-space modes and fitness coupling changes their growth or decay rates.
-\end{enumerate}
-
-The first concrete goal is therefore not to find the best matrix $A$. It is to determine which simple forms of frequency-dependent fitness coupling qualitatively change evolutionary accessibility.
+The local condition in Eq.~\eqref{eq:invasion} and the spectral representation address different scales of the same dynamics. The first describes how population feedback changes individual mutational steps near a resident state. The second can be used to determine how the same feedback changes relaxation or amplification of larger-scale variation across genotype space.
 
 \end{document}
