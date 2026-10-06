@@ -112,7 +112,25 @@ Figure~\ref{fig:dynamics} uses a three-bit landscape with $\Delta a=1$. Genotype
 \label{fig:dynamics}
 \end{figure}
 
-\subsection{A collective connectivity transition}
+\subsection{A minimal connectivity transition}
+
+Let $C(\beta)$ denote the size of the largest connected component of $R_\beta$ and define
+\begin{equation}
+S(\beta)
+=
+\frac{C(\beta)}{2^L}.
+\label{eq:order-parameter}
+\end{equation}
+A collective change can already occur on the three-dimensional cube. Figure~\ref{fig:small-transition} uses a schematic landscape in which the reversible graph consists of two four-genotype components below $\beta_c$. At $\beta_c$, one additional bridge edge satisfies Eq.~\eqref{eq:edge-threshold} and joins the two components. The local opening of one edge therefore produces the global jump $S:1/2\to1$.
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2}
+\caption{Minimal connectivity transition on a three-bit genotype cube. (a) Below $\beta_c$, the reversible graph contains two four-genotype components, distinguished by filled and open nodes. Above $\beta_c$, one bridge edge becomes reversible and joins all eight genotypes. (b) Largest-component fraction $S$ as the coupling strength increases. The bridge opening at $\beta_c=0.45$ produces the jump from $S=1/2$ to $S=1$.}
+\label{fig:small-transition}
+\end{figure}
+
+\subsection{Scaling to random genotype spaces}
 
 The edge thresholds in Eq.~\eqref{eq:edge-threshold} define a percolation-like ensemble once the intrinsic landscape is random. We take independent Gaussian fitness values $g_i\sim\mathcal N(0,1)$ and absorb $\Delta a$ into $\beta$. For a neighboring pair, $g_i-g_j\sim\mathcal N(0,2)$, so the probability that an edge belongs to $R_\beta$ is
 \begin{equation}
@@ -132,21 +150,12 @@ L q(\beta).
 \end{equation}
 This resembles bond percolation, but the edge states are not independent: two incident thresholds share the fitness of their common genotype. The random fitness landscape therefore induces a correlated bond process on the hypercube.
 
-Let $C(\beta)$ denote the size of the largest connected component of $R_\beta$ and define
-\begin{equation}
-S(\beta)
-=
-\frac{C(\beta)}{2^L}.
-\label{eq:order-parameter}
-\end{equation}
-The local-to-global mechanism is already visible on a three-dimensional cube. Figure~\ref{fig:percolation}(a) uses a schematic landscape in which two four-genotype components are internally reversible below $\beta_c$, while all edges between them remain closed. At $\beta_c$, a single bridge edge becomes reversible and joins the two components, giving $S:1/2\to1$.
-
-Panels (b,c) show the corresponding finite-size behavior for random landscapes with $L=6,8,10,12$. For each realization, edges are added in the order set by $\beta_{ij}$ and $S$ is measured as the threshold is increased. The ensemble-averaged component fraction develops a progressively sharper rise, while the probability of a component containing more than half of genotype space becomes localized near $c\simeq1.5$. The width of this probability transition decreases strongly over the dimensions shown. This is numerical evidence for a collective connectivity transition, but larger $L$ and finite-size scaling are required before identifying a limiting critical point.
+Figure~\ref{fig:percolation} scales the construction to random landscapes with $L=6,8,10,12$. For each realization, edges are added in the order set by $\beta_{ij}$ and $S$ is measured as the threshold is increased. The ensemble-averaged component fraction develops a progressively sharper rise, while the probability of a component containing more than half of genotype space becomes localized near $c\simeq1.5$. The width of this probability transition decreases strongly over the dimensions shown. This is numerical evidence for a collective connectivity transition, but larger $L$ and finite-size scaling are required before identifying a limiting critical point.
 
 \begin{figure}[htb!]
 \centering
-\includegraphics[width=\textwidth]{figures/fig2}
-\caption{From local edge opening to collective reversible accessibility. (a) Minimal three-bit example. Below $\beta_c$, the reversible graph consists of two four-genotype components, distinguished by filled and open nodes. Above $\beta_c$, one additional bridge edge becomes reversible and joins all eight genotypes into one component. (b,c) Random Gaussian landscapes with $c=Lq(\beta)$ from Eq.~\eqref{eq:mean-degree}. (b) Ensemble mean of the largest-component fraction $S$; bands show the standard error. (c) Probability that the largest reversible component contains more than half of genotype space. Curves correspond to increasing genotype dimension $L$.}
+\includegraphics[width=\textwidth]{figures/fig3}
+\caption{Finite-size sharpening of reversible accessibility on random genotype cubes. Intrinsic fitness values are independent $\mathcal N(0,1)$ variables and $c=Lq(\beta)$ is the mean reversible degree from Eq.~\eqref{eq:mean-degree}. (a) Ensemble mean of the largest-component fraction $S$; bands show the standard error. (b) Probability that the largest reversible component contains more than half of genotype space. Curves correspond to increasing genotype dimension $L$.}
 \label{fig:percolation}
 \end{figure}
 
