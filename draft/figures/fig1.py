@@ -12,7 +12,7 @@ N = 2**L
 T = 140
 MU = 1e-3
 ETA = 1.5
-BETAS = (0.0, 0.4)
+BETAS = (0.0, .4)
 
 labels = [format(i, f"0{L}b") for i in range(N)]
 sequences = np.array([[int(bit) for bit in label] for label in labels])
@@ -76,7 +76,7 @@ for ax, beta, history, panel in zip(axes, BETAS, trajectories, ["(a)", "(b)"]):
     ax.set_xlabel(r"generation $t$")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.text(-0.09, 1.01, panel, transform=ax.transAxes, fontsize=10)
+    ax.text(-0.1, 1.05, panel, transform=ax.transAxes, fontsize=10)
     ax.text(0.05, 0.50, rf"$\beta={beta:g}$", transform=ax.transAxes, fontsize=10)
 
 axes[0].set_ylabel(r"frequency $p_i(t)$")
