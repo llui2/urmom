@@ -150,6 +150,30 @@ If $a_1 > a_0$, an intrinsically unfavorable edge becomes locally favorable abov
 \end{equation}
 The first quantities to measure are the set of locally favorable mutational edges, escape from intrinsic local peaks, the resulting population trajectory, and their dependence on $\beta$, landscape ruggedness, and the coefficients $a_d$. Diversity is treated as an outcome of the dynamics rather than an optimization objective.
 
+\section{Collective transition in the invasion graph}
+
+Equation~\eqref{eq:invasion} defines a directed invasion graph $G_\beta$ on the hypercube. Its vertices are genotypes, and a directed edge $i \to j$ is present when the rare mutant $j$ increases in a population concentrated at resident $i$. Each edge is therefore evaluated in a different resident state. The graph combines local invasion tests across population states rather than a simultaneous fitness ranking at one fixed composition.
+
+For the radial coupling in Eq.~\eqref{eq:radial-coupling}, let $\Delta a = a_1-a_0 > 0$. Along a mutational edge $\{i,j\}$, the direction toward the genotype with larger intrinsic fitness is present for every $\beta \geq 0$. The opposite direction appears when
+\begin{equation}
+\beta
+>
+\beta^{\mathrm{rev}}_{ij}
+=
+\frac{|g_i-g_j|}{\Delta a}.
+\label{eq:reverse-threshold}
+\end{equation}
+At $\beta=0$, and in the absence of fitness ties between neighboring genotypes, $G_0$ is an acyclic orientation of the hypercube and all strongly connected components are singletons. Increasing $\beta$ adds reverse directions through the local thresholds in Eq.~\eqref{eq:reverse-threshold}. The resulting change can be global because one new reverse direction can close several pre-existing directed paths and merge previously separate strongly connected components.
+
+For the three-bit landscape used in Fig.~\ref{fig:dynamics}, with $\Delta a=1$, this produces the transition in Fig.~\ref{fig:invasion-graph}. Immediately below $\beta_c=0.5$, the strongly connected components have sizes $4$, $2$, and $2$. Immediately above $\beta_c$, the reverse direction on the edge connecting $001$ and $101$ opens and the largest component jumps from four genotypes to all eight. The edge connecting $100$ and $110$ remains one-way until $\beta=0.51$, so the global transition does not require all local edges to become reversible.
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=\textwidth]{figures/fig2}
+\caption{Collective accessibility transition on the three-bit genotype cube. Light edges remain one-way under the resident-conditioned invasion test, while dark edges are bidirectional; filled nodes belong to the largest strongly connected component. (a) Immediately below $\beta_c=0.5$, the largest component contains four genotypes. Immediately above $\beta_c$, one additional reverse direction on the $001$--$101$ edge, shown by the heaviest edge, makes all eight genotypes mutually reachable. (b) Size $S_{\max}$ of the largest strongly connected component as the coupling strength increases. Local edge reversals occur at separate thresholds, but $S_{\max}$ jumps from $4$ to $8$ at $\beta_c$.}
+\label{fig:invasion-graph}
+\end{figure}
+
 \section{Mathematical direction}
 
 For the distance-dependent family in Eq.~\eqref{eq:radial-coupling}, both mutation and fitness coupling respect the symmetries of the hypercube and can be represented in the Walsh basis. This gives a complementary description in which mutation and frequency-dependent fitness act on the same genotype-space modes.

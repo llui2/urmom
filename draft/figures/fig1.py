@@ -18,7 +18,7 @@ labels = [format(i, f"0{L}b") for i in range(N)]
 sequences = np.array([[int(bit) for bit in label] for label in labels])
 distance = np.sum(sequences[:, None, :] != sequences[None, :, :], axis=2)
 
-g = np.array([1.00, 0.80, 0.20, 1.05, 0.10, 0.30, 0.60, 1.30])
+g = np.array([1.00, 0.80, 0.20, 1.05, 0.10, 0.30, 0.61, 1.30])
 
 Q = np.zeros((N, N))
 for i in range(N):

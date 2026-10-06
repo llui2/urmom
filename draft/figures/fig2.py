@@ -10,12 +10,17 @@ OUT = Path(__file__).with_suffix(".pdf")
 L = 3
 N = 2**L
 
-labels = [format(i, f"0{L}b") for i in range(N)]
-sequences = np.array([[int(bit) for bit in label] for label in labels])
-distance = np.sum(sequences[:, None, :] != sequences[None, :, :], axis=2)
+sequences = np.array(
+    [[int(bit) for bit in format(i, f"0{L}b")] for i in range(N)]
+)
+distance = np.sum(
+    sequences[:, None, :] != sequences[None, :, :],
+    axis=2,
+)
 
 # Same intrinsic landscape and nearest-neighbor coupling as Fig. 1.
-g = np.array([1.00, 0.80, 0.20, 1.05, 0.10, 0.30, 0.60, 1.30])
+# g_110 = 0.61 separates two otherwise degenerate edge thresholds.
+g = np.array([1.00, 0.80, 0.20, 1.05, 0.10, 0.30, 0.61, 1.30])
 edges = [
     (i, j)
     for i in range(N)
@@ -24,7 +29,6 @@ edges = [
 ]
 threshold = {(i, j): abs(g[i] - g[j]) for i, j in edges}
 
-# A compact 2D projection of the three-cube.
 cube_xy = np.array([
     [0.00, 0.00],
     [1.00, 0.00],
@@ -42,27 +46,38 @@ def invasion_matrix(beta):
     adjacency = np.zeros((N, N), dtype=bool)
 
     for i, j in edges:
-        if g[j] - g[i] + beta > 0:
-            adjacency[i, j] = True
-        if g[i] - g[j] + beta > 0:
-            adjacency[j, i] = True
+        adjacency[i, j] = g[j] - g[i] + beta > 0
+        adjacency[j, i] = g[i] - g[j] + beta > 0
 
     return adjacency
 
 
-def largest_scc_size(beta):
-    """Largest strongly connected component from Boolean transitive closure."""
+def strong_components(beta):
+    """Strongly connected components from Boolean transitive closure."""
     reach = invasion_matrix(beta) | np.eye(N, dtype=bool)
 
     for k in range(N):
         reach |= reach[:, [k]] & reach[[k], :]
 
     mutual = reach & reach.T
-    return int(mutual.sum(axis=1).max())
+    unseen = set(range(N))
+    components = []
+
+    while unseen:
+        i = min(unseen)
+        component = set(np.flatnonzero(mutual[i]))
+        unseen -= component
+        components.append(component)
+
+    return sorted(
+        components,
+        key=lambda component: (len(component), -min(component)),
+        reverse=True,
+    )
 
 
-def reversible_edge_count(beta):
-    return sum(beta > threshold[edge] for edge in edges)
+def largest_scc_size(beta):
+    return len(strong_components(beta)[0])
 
 
 def segmented_xy(xy, selected_edges):
@@ -75,9 +90,10 @@ def segmented_xy(xy, selected_edges):
     return x, y
 
 
-assert largest_scc_size(0.499999) == 4
-assert largest_scc_size(0.500001) == 8
-assert reversible_edge_count(0.500001) == 7
+assert [len(component) for component in strong_components(0.49)] == [4, 2, 2]
+assert largest_scc_size(0.501) == 8
+assert threshold[(1, 5)] == 0.5
+assert threshold[(4, 6)] == 0.51
 
 plt.rcParams.update({
     "font.family": "serif",
@@ -86,17 +102,16 @@ plt.rcParams.update({
     "axes.labelsize": 10,
     "xtick.labelsize": 8,
     "ytick.labelsize": 8,
-    "legend.fontsize": 8,
 })
 
-fig, axes = plt.subplots(1, 2, figsize=(6.4, 2.55))
+fig, axes = plt.subplots(1, 2, figsize=(6.4, 2.45))
 
 ax = axes[0]
-snapshots = (0.0, 0.30, 0.55)
-offsets = (0.0, 1.82, 3.64)
+snapshots = (0.49, 0.501)
+offsets = (0.0, 1.95)
+bridge = (1, 5)
 
 for beta, dx in zip(snapshots, offsets):
-    ax.set_prop_cycle(None)
     xy = cube_xy.copy()
     xy[:, 0] += dx
 
@@ -104,45 +119,84 @@ for beta, dx in zip(snapshots, offsets):
     one_way = [edge for edge in edges if edge not in reversible]
 
     x, y = segmented_xy(xy, one_way)
-    ax.plot(x, y, lw=0.8, alpha=0.16)
+    ax.plot(x, y, lw=0.8, color="0.82", zorder=1)
 
     x, y = segmented_xy(xy, reversible)
-    if reversible:
-        ax.plot(x, y, lw=2.0)
+    ax.plot(x, y, lw=1.7, color="0.30", zorder=2)
 
-    ax.scatter(xy[:, 0], xy[:, 1], s=20, zorder=3)
-    ax.text(dx + 0.69, -0.34, rf"$\beta={beta:g}$", ha="center")
+    if beta > threshold[bridge]:
+        x, y = segmented_xy(xy, [bridge])
+        ax.plot(x, y, lw=2.6, color="0.08", zorder=3)
 
-ax.set_xlim(-0.20, 5.22)
-ax.set_ylim(-0.47, 1.52)
+    ax.scatter(
+        xy[:, 0],
+        xy[:, 1],
+        s=18,
+        facecolor="white",
+        edgecolor="0.55",
+        linewidth=0.8,
+        zorder=4,
+    )
+
+    largest = strong_components(beta)[0]
+    ids = sorted(largest)
+    ax.scatter(
+        xy[ids, 0],
+        xy[ids, 1],
+        s=25,
+        facecolor="0.18",
+        edgecolor="0.18",
+        linewidth=0.8,
+        zorder=5,
+    )
+
+    relation = "<" if beta < 0.5 else ">"
+    ax.text(
+        dx + 0.69,
+        -0.34,
+        rf"$\beta {relation} \beta_c$",
+        ha="center",
+    )
+
+ax.set_xlim(-0.16, 3.48)
+ax.set_ylim(-0.47, 1.50)
 ax.set_aspect("equal")
 ax.axis("off")
-ax.text(-0.04, 1.04, "(a)", transform=ax.transAxes, fontsize=10)
+ax.text(-0.04, 1.02, "(a)", transform=ax.transAxes, fontsize=10)
 
 ax = axes[1]
 beta = np.linspace(0, 1.05, 2101)
 largest = np.array([largest_scc_size(value) for value in beta])
-reversible = np.array([reversible_edge_count(value) for value in beta])
 
-ax.step(beta, largest, where="post", lw=1.8, label="largest SCC")
-ax.step(beta, reversible, where="post", lw=1.5, label="reversible edges")
-ax.axvline(0.5, ls="--", lw=1.0)
-ax.text(0.515, 1.35, r"$\beta_c=0.5$", rotation=90, va="bottom")
+ax.step(beta, largest, where="post", lw=1.8, color="0.15")
+ax.axvline(0.5, ls="--", lw=1.0, color="0.45")
+ax.text(
+    0.515,
+    1.30,
+    r"$\beta_c=0.5$",
+    rotation=90,
+    va="bottom",
+)
 ax.set_xlim(0, 1.05)
-ax.set_ylim(0, 12.4)
+ax.set_ylim(0.7, 8.45)
 ax.set_xlabel(r"coupling strength $\beta$")
-ax.set_ylabel("count")
-ax.set_yticks([0, 2, 4, 6, 8, 10, 12])
+ax.set_ylabel(r"largest component $S_{\max}$")
+ax.set_yticks([1, 2, 4, 8])
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
-ax.legend(frameon=False, loc="upper left")
-ax.text(-0.12, 1.04, "(b)", transform=ax.transAxes, fontsize=10)
+ax.text(-0.13, 1.02, "(b)", transform=ax.transAxes, fontsize=10)
 
-fig.subplots_adjust(left=0.035, right=0.99, bottom=0.21, top=0.91, wspace=0.25)
+fig.subplots_adjust(
+    left=0.04,
+    right=0.99,
+    bottom=0.22,
+    top=0.92,
+    wspace=0.30,
+)
 fig.savefig(OUT, bbox_inches="tight")
 plt.close(fig)
 
 print("beta_c = 0.500")
-print("largest SCC: 4 -> 8")
-print("reversible edges at transition: 7 / 12")
+print("S_max: 4 -> 8")
+print("next edge threshold = 0.510")
 print(OUT)
