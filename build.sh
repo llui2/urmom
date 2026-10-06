@@ -3,18 +3,24 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "$0")" && pwd)"
-cd "$repo_root"
+figure_dir="$repo_root/draft/figures"
 
+cd "$repo_root"
 git pull --ff-only
 
-cd draft
+shopt -s nullglob
+scripts=("$figure_dir"/fig*.py)
 
-# Generated figure PDFs are build artifacts. Remove stale outputs such as an
-# old fig2.pdf before rebuilding the figures that currently belong to the draft.
-rm -f figures/fig*.pdf
+if [ "${#scripts[@]}" -eq 0 ]; then
+    echo "No figure scripts found in $figure_dir"
+    exit 1
+fi
 
-for script in figures/fig*.py; do
+rm -f "$figure_dir"/fig*.pdf
+
+for script in "${scripts[@]}"; do
     python3 "$script"
 done
 
+cd "$repo_root/draft"
 latexmk -g -pdf -interaction=nonstopmode -halt-on-error main.tex
