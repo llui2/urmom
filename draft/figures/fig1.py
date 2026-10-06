@@ -64,7 +64,7 @@ plt.rcParams.update({
     "legend.fontsize": 8,
 })
 
-fig, axes = plt.subplots(1, 2, figsize=(6.8, 2.8), sharex=True, sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(6.8, 3.15), sharex=True, sharey=True)
 
 for ax, beta, history, panel in zip(axes, BETAS, trajectories, ["a", "b"]):
     for i in focus:
@@ -125,12 +125,12 @@ fig.legend(
     ncol=5,
     frameon=False,
     loc="upper center",
-    bbox_to_anchor=(0.5, 1.10),
+    bbox_to_anchor=(0.5, 0.99),
     columnspacing=1.3,
     handlelength=2.0,
 )
 
-fig.tight_layout(rect=(0, 0, 1, 0.94))
+# Reserve a dedicated top band for the shared legend.\nfig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.72, wspace=0.24)
 fig.savefig(OUT, bbox_inches="tight")
 plt.close(fig)
 
