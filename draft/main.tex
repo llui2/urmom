@@ -5,74 +5,80 @@
 \let\Bbbk\relax
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{microtype}
-\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{graphicx}
+\usepackage[numbers]{natbib}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
 
 \begin{document}
 
 \title{Frequency-dependent fitness on genotype space}
 \maketitle
 
-A genotype fitness landscape assigns an intrinsic fitness $g_i$ to each genotype. This description is incomplete when the selective value of a genotype depends on the current population. We consider a minimal model in which mutation follows an explicit genotype graph while population composition changes relative fitness through a coupling matrix $A$. The aim is to determine when this feedback changes the mutational routes favored by selection.
+Fitness landscapes assign reproductive values to genotypes and thereby constrain which mutational paths are favored by selection \cite{weinreich2006,devisser2014}. Mutation and frequency-dependent selection have also been combined in replicator--mutator models \cite{page2002}. Recent experiments with bacteriophage $\lambda$ directly show that competitive context can change mutational effects and epistasis, deforming the measured fitness landscape during adaptation \cite{doud2024}. We consider a minimal discrete model in which mutation follows an explicit genotype graph while the current population changes relative fitness. The aim is to isolate how this feedback changes evolutionary accessibility.
 
 \section{Model}
 
-Consider binary genotypes $x_i \in \{0,1\}^L$, with frequencies $p_i \geq 0$ and $\sum_i p_i = 1$. Mutation connects genotypes at Hamming distance one. With mutation probability $\mu$, the mutation matrix is
+Consider binary genotypes $x_i \in \{0,1\}^L$, with frequencies $p_i(t) \geq 0$ and $\sum_i p_i(t) = 1$. Mutation connects genotypes at Hamming distance one. We define $Q_{ji}$ as the probability that genotype $j$ produces genotype $i$ after mutation,
 \begin{equation}
-Q_{ii} = 1 - \mu,
-\qquad
-Q_{ij} = \frac{\mu}{L}
-\quad \text{if} \quad
-d_H(x_i,x_j) = 1,
+Q_{ji}
+=
+\begin{cases}
+1 - \mu, & i = j,\\[2pt]
+\mu/L, & d_H(x_i,x_j) = 1,\\[2pt]
+0, & \text{otherwise}.
+\end{cases}
+\label{eq:mutation-matrix}
 \end{equation}
-and $Q_{ij} = 0$ otherwise.
 
-The effective fitness of genotype $i$ is
+Each genotype has an intrinsic fitness $g_i$. Its effective fitness at generation $t$ is
 \begin{equation}
-f_i(p)
+f_i(t)
 =
 g_i
 +
-\beta \sum_j A_{ij} p_j.
+\beta \sum_j A_{ij} p_j(t),
 \label{eq:fitness}
 \end{equation}
-Here $g_i$ is the intrinsic fitness and $A_{ij}$ measures how the frequency of genotype $j$ changes the fitness of genotype $i$. We therefore refer to $A$ as a fitness-coupling matrix.
+where $A_{ij}$ measures how the frequency of genotype $j$ changes the fitness of genotype $i$. We therefore refer to $A$ as a fitness-coupling matrix.
 
-Selection acts according to
+Selection and mutation are applied in one discrete update. Define the selection normalization
 \begin{equation}
-\widetilde p_i
+Z(t)
 =
-\frac{
-p_i \exp[\eta f_i(p)]
-}{
-\sum_k p_k \exp[\eta f_k(p)]
-},
-\label{eq:selection}
+\sum_k p_k(t) \exp[\eta f_k(t)].
 \end{equation}
-followed by mutation,
+The population then evolves according to
 \begin{equation}
 p_i(t+1)
 =
-\sum_j \widetilde p_j Q_{ji}.
-\label{eq:mutation}
+\sum_j
+Q_{ji}
+\frac{
+p_j(t) \exp[\eta f_j(t)]
+}{
+Z(t)
+}.
+\label{eq:dynamics}
 \end{equation}
+The vector $g$ defines the intrinsic landscape, $Q$ defines the mutation geometry, and $A$ changes relative fitness as the population changes.
 
-The vector $g$, the matrix $A$, and the mutation operator $Q$ play distinct roles. The vector $g$ defines the intrinsic landscape, $Q$ defines which mutational moves are possible, and $A$ changes the relative selective value of those moves as the population changes.
+When random landscapes are used, $g$ is drawn once per realization and kept fixed during Eq.~\eqref{eq:dynamics}. The original exploratory script used independent standard-normal entries and drew a new landscape between optimization runs, not during an evolutionary trajectory. The landscape is therefore quenched on the dynamical timescale. More generally, the distribution of $g$ can be chosen to control landscape correlations or ruggedness.
 
 \section{Relative fitness and local accessibility}
 
 Only fitness differences enter the selection step. For two genotypes $i$ and $k$,
 \begin{equation}
-f_i(p) - f_k(p)
+f_i(t) - f_k(t)
 =
 g_i - g_k
 +
 \beta \sum_j
-(A_{ij} - A_{kj}) p_j.
+(A_{ij} - A_{kj}) p_j(t).
 \label{eq:relative-fitness}
 \end{equation}
 The first term is fixed by the intrinsic landscape, while the second depends on population composition.
 
-Consider a population concentrated at genotype $i$ and a rare one-step mutant $j$. Before mutation mixing, the ratio $p_j/p_i$ is multiplied during selection by
+Consider a population concentrated at genotype $i$ and a rare one-step mutant $j$. During selection, the mutant-to-resident ratio is multiplied by
 \begin{equation}
 \exp\left[
 \eta
@@ -83,7 +89,7 @@ g_j - g_i
 \right)
 \right].
 \end{equation}
-The mutant therefore increases relative to the resident during the selection step when
+The mutant therefore increases relative to the resident when
 \begin{equation}
 g_j - g_i
 +
@@ -92,10 +98,9 @@ g_j - g_i
 0.
 \label{eq:invasion}
 \end{equation}
+Equation~\eqref{eq:invasion} gives a local accessibility condition in the rare-mutant limit. Mutation creates the mutant through $Q$, while fitness coupling changes its selective effect after it appears. A step with $g_j < g_i$ can therefore become favorable in the population created by genotype $i$.
 
-Equation~\eqref{eq:invasion} gives a local notion of accessibility in the rare-mutant limit. Mutation creates the mutant through $Q$, while the fitness coupling changes its selective effect after it appears. A step with $g_j < g_i$ can therefore become favorable in the population created by genotype $i$.
-
-The matrix $A$ also contains a redundant component. Replacing
+The matrix $A$ contains a redundant component. Replacing
 \begin{equation}
 A
 \longrightarrow
@@ -103,9 +108,20 @@ A + \mathbf{1} v^{\mathsf T}
 \end{equation}
 adds the same quantity $v^{\mathsf T}p$ to every genotype fitness and leaves Eq.~\eqref{eq:relative-fitness} unchanged. The dynamics therefore depends on differences between rows of $A$, not on all matrix entries independently.
 
+\section{Illustrative dynamics}
+
+Figure~\ref{fig:dynamics} shows one fixed three-bit landscape. Genotype $000$ is an intrinsic local peak, genotype $111$ is the global peak, and the coupling acts only between Hamming-distance-one genotypes. With $\beta = 0$, the intrinsically unfavorable intermediate $001$ remains at mutation-scale frequency. With $\beta = 0.4$, the initial condition in Eq.~\eqref{eq:invasion} favors $001$, which reaches finite frequency and changes the subsequent population trajectory. The figure is an illustration of the mechanism rather than a statistical statement about random landscapes.
+
+\begin{figure}[htb!]
+\centering
+\includegraphics[width=\textwidth]{figures/fig1}
+\caption{Frequency-dependent fitness changes the population trajectory on a fixed genotype landscape. The intrinsic fitness values along the displayed path are $g_{000}=1.00$, $g_{001}=0.80$, $g_{011}=1.05$, and $g_{111}=1.30$, with $\mu=10^{-3}$ and $\eta=1.5$. The coupling has $a_0=0$, $a_1=1$, and $a_{d>1}=0$. (a) Without coupling, the population remains near $000$ until mutation seeds higher-fitness genotypes. (b) For $\beta=0.4$, the intrinsically unfavorable step $000\to001$ satisfies Eq.~\eqref{eq:invasion}; genotype $001$ becomes a substantial transient component and the later composition is altered.}
+\label{fig:dynamics}
+\end{figure}
+
 \section{Minimal problem}
 
-We first consider a rugged intrinsic landscape with a local peak and a higher peak elsewhere. Starting near the local peak, the baseline dynamics with $\beta = 0$ determines the mutational routes favored by the intrinsic landscape. We then introduce a low-dimensional family of fitness couplings and determine when Eq.~\eqref{eq:invasion} changes those routes.
+We first consider a rugged intrinsic landscape with a local peak and a higher peak elsewhere. Starting near the local peak, the baseline dynamics with $\beta = 0$ defines the mutational routes favored by the intrinsic landscape. We then introduce a low-dimensional family of fitness couplings and determine when Eq.~\eqref{eq:invasion} changes those routes.
 
 A simple first family is
 \begin{equation}
@@ -116,12 +132,30 @@ a_{d_H(x_i,x_j)},
 \end{equation}
 where the coupling depends only on genetic distance. This keeps mutation and fitness coupling on the same genotype geometry and reduces the number of free coupling parameters from $O(4^L)$ to $O(L)$.
 
-The first quantities to measure are the locally favorable mutational edges, escape from intrinsic local peaks, the resulting population trajectory, and their dependence on $\beta$, landscape ruggedness, and the coefficients $a_d$. Diversity is treated as an outcome of the dynamics rather than an optimization objective.
+For a monomorphic resident $i$ and a one-step mutant $j$, Eq.~\eqref{eq:invasion} becomes
+\begin{equation}
+g_j - g_i
++
+\beta (a_1 - a_0)
+>
+0.
+\end{equation}
+If $a_1 > a_0$, an intrinsically unfavorable edge becomes locally favorable above
+\begin{equation}
+\beta_{i\to j}
+=
+\frac{g_i-g_j}{a_1-a_0}.
+\label{eq:edge-threshold}
+\end{equation}
+The first quantities to measure are the set of locally favorable mutational edges, escape from intrinsic local peaks, the resulting population trajectory, and their dependence on $\beta$, landscape ruggedness, and the coefficients $a_d$. Diversity is treated as an outcome of the dynamics rather than an optimization objective.
 
 \section{Mathematical direction}
 
 For the distance-dependent family in Eq.~\eqref{eq:radial-coupling}, both mutation and fitness coupling respect the symmetries of the hypercube and can be represented in the Walsh basis. This gives a complementary description in which mutation and frequency-dependent fitness act on the same genotype-space modes.
 
 The local condition in Eq.~\eqref{eq:invasion} and the spectral representation address different scales of the same dynamics. The first describes how population feedback changes individual mutational steps near a resident state. The second can be used to determine how the same feedback changes relaxation or amplification of larger-scale variation across genotype space.
+
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
 
 \end{document}
