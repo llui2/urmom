@@ -1,4 +1,4 @@
-"""Illustrative mutation-selection trajectories with frequency-dependent fitness."""
+"""Canonical Fig. 1 simulation for the current draft."""
 
 from pathlib import Path
 
