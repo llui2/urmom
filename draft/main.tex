@@ -6,6 +6,7 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{microtype}
 \usepackage{graphicx}
+\usepackage{placeins}
 \usepackage{xcolor}
 \usepackage[numbers]{natbib}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
@@ -105,12 +106,13 @@ p_j(t)\exp[\eta f_j(p(t))]
 
 Figure~\ref{fig:dynamics} uses a three-bit landscape with $\Delta a=1$. Genotype $000$ is an intrinsic local peak and $111$ is the global peak. With $\beta=0$, the intermediate $001$ remains at mutation-scale frequency. With $\beta=0.4$, Eq.~\eqref{eq:edge-threshold} opens the step $000\to001$, which reaches finite frequency and changes the subsequent population trajectory. This example only illustrates the local mechanism; the collective transition is studied below over random landscapes.
 
-\begin{figure}[htb!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{figures/fig1}
 \caption{Frequency-dependent opening of a mutational step. The initial condition is $p_{000}(0)=1$, with $\mu=10^{-3}$ and $\eta=1.5$. The coupling acts between Hamming-distance-one genotypes with $a_0=0$ and $a_1=1$. (a) For $\beta=0$, genotype $001$ remains near mutation scale. (b) For $\beta=0.4$, the step $000\to001$ is favorable in the $000$ resident background, transiently amplifying $001$ and changing the later trajectory.}
 \label{fig:dynamics}
 \end{figure}
+\FloatBarrier
 
 \subsection{A minimal connectivity transition}
 
@@ -123,12 +125,13 @@ S(\beta)
 \end{equation}
 A collective change can already occur on the three-dimensional cube. Figure~\ref{fig:small-transition} uses a schematic landscape in which the reversible graph consists of two four-genotype components below $\beta_c$. At $\beta_c$, one additional bridge edge satisfies Eq.~\eqref{eq:edge-threshold} and joins the two components. The local opening of one edge therefore produces the global jump $S:1/2\to1$.
 
-\begin{figure}[htb!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{figures/fig2}
 \caption{Minimal connectivity transition on a three-bit genotype cube. (a) Below $\beta_c$, the reversible graph contains two four-genotype components, distinguished by filled and open nodes. Above $\beta_c$, one bridge edge becomes reversible and joins all eight genotypes. (b) Largest-component fraction $S$ as the coupling strength increases. The bridge opening at $\beta_c=0.45$ produces the jump from $S=1/2$ to $S=1$.}
 \label{fig:small-transition}
 \end{figure}
+\FloatBarrier
 
 \subsection{Scaling to random genotype spaces}
 
@@ -152,12 +155,13 @@ This resembles bond percolation, but the edge states are not independent: two in
 
 Figure~\ref{fig:percolation} scales the construction to random landscapes with $L=6,8,10,12$. For each realization, edges are added in the order set by $\beta_{ij}$ and $S$ is measured as the threshold is increased. The ensemble-averaged component fraction develops a progressively sharper rise, while the probability of a component containing more than half of genotype space becomes localized near $c\simeq1.5$. The width of this probability transition decreases strongly over the dimensions shown. This is numerical evidence for a collective connectivity transition, but larger $L$ and finite-size scaling are required before identifying a limiting critical point.
 
-\begin{figure}[htb!]
+\begin{figure}[!htb]
 \centering
 \includegraphics[width=\textwidth]{figures/fig3}
 \caption{Finite-size sharpening of reversible accessibility on random genotype cubes. Intrinsic fitness values are independent $\mathcal N(0,1)$ variables and $c=Lq(\beta)$ is the mean reversible degree from Eq.~\eqref{eq:mean-degree}. (a) Ensemble mean of the largest-component fraction $S$; bands show the standard error. (b) Probability that the largest reversible component contains more than half of genotype space. Curves correspond to increasing genotype dimension $L$.}
 \label{fig:percolation}
 \end{figure}
+\FloatBarrier
 
 The construction separates the local and collective parts of the mechanism. Frequency-dependent selection determines the edge threshold in Eq.~\eqref{eq:edge-threshold}; the genotype geometry then determines whether the opened edges remain isolated or join into a large traversable region. The next analytical problem is therefore the correlated percolation induced by shared genotype fitness values, rather than the existence of a single favorable path on a fixed landscape.
 
