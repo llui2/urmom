@@ -1,4 +1,4 @@
-"""Finite-size reversible-accessibility transition on random genotype cubes."""
+"""Local bridge opening and finite-size reversible-accessibility transition."""
 
 from math import erf
 from pathlib import Path
@@ -76,6 +76,33 @@ for L, repeats in SETTINGS:
         "prob": (values > 0.5).mean(axis=0),
     }
 
+# Schematic three-bit landscape. Each square face is internally reversible
+# below beta_c = 0.45; the edge 000--100 is the first bridge between them.
+g_small = np.array([0.00, 0.10, 0.20, 0.30, 0.45, 0.70, 0.75, 0.82])
+i3, j3 = hypercube_edges(3)
+threshold3 = np.abs(g_small[i3] - g_small[j3])
+cube_xy = np.array([
+    [0.00, 0.00],
+    [1.00, 0.00],
+    [0.00, 1.00],
+    [1.00, 1.00],
+    [0.38, 0.30],
+    [1.38, 0.30],
+    [0.38, 1.30],
+    [1.38, 1.30],
+])
+bridge = (0, 4)
+
+assert np.isclose(abs(g_small[0] - g_small[4]), 0.45)
+assert all(
+    abs(g_small[i] - g_small[j]) < 0.45
+    for i, j in [(0, 1), (0, 2), (1, 3), (2, 3)]
+)
+assert all(
+    abs(g_small[i] - g_small[j]) < 0.45
+    for i, j in [(4, 5), (4, 6), (5, 7), (6, 7)]
+)
+
 plt.rcParams.update({
     "font.family": "serif",
     "mathtext.fontset": "cm",
@@ -86,17 +113,68 @@ plt.rcParams.update({
     "legend.fontsize": 8,
 })
 
-fig, axes = plt.subplots(1, 2, figsize=(6.4, 2.5), sharex=True)
+fig = plt.figure(figsize=(6.4, 2.35))
+grid = fig.add_gridspec(1, 3, width_ratios=[1.32, 1, 1], wspace=0.35)
+ax0 = fig.add_subplot(grid[0, 0])
+ax1 = fig.add_subplot(grid[0, 1])
+ax2 = fig.add_subplot(grid[0, 2], sharex=ax1)
+
+for beta, dx in ((0.44, 0.0), (0.46, 1.90)):
+    xy = cube_xy.copy()
+    xy[:, 0] += dx
+
+    for i, j, threshold in zip(i3, j3, threshold3):
+        active = beta > threshold
+        is_bridge = (int(i), int(j)) == bridge
+        ax0.plot(
+            [xy[i, 0], xy[j, 0]],
+            [xy[i, 1], xy[j, 1]],
+            lw=2.3 if active and is_bridge else (1.45 if active else 0.75),
+            color="0.05" if active else "0.84",
+            zorder=1,
+        )
+
+    ax0.scatter(
+        xy[:4, 0],
+        xy[:4, 1],
+        s=20,
+        facecolor="0.15",
+        edgecolor="0.15",
+        zorder=3,
+    )
+    ax0.scatter(
+        xy[4:, 0],
+        xy[4:, 1],
+        s=20,
+        facecolor="white" if beta < 0.45 else "0.15",
+        edgecolor="0.15",
+        linewidth=0.8,
+        zorder=3,
+    )
+
+    relation = "<" if beta < 0.45 else ">"
+    ax0.text(
+        dx + 0.69,
+        -0.33,
+        rf"$\beta {relation} \beta_c$",
+        ha="center",
+    )
+
+ax0.set_xlim(-0.15, 3.40)
+ax0.set_ylim(-0.46, 1.48)
+ax0.set_aspect("equal")
+ax0.axis("off")
+ax0.text(-0.03, 1.02, "(a)", transform=ax0.transAxes, fontsize=10)
 
 for L, _ in SETTINGS:
     curve = data[L]
-    line = axes[0].plot(
+    line = ax1.plot(
         curve["c"],
         curve["mean"],
-        lw=1.6,
+        lw=1.45,
         label=rf"$L={L}$",
     )[0]
-    axes[0].fill_between(
+    ax1.fill_between(
         curve["c"],
         curve["mean"] - curve["sem"],
         curve["mean"] + curve["sem"],
@@ -104,29 +182,30 @@ for L, _ in SETTINGS:
         alpha=0.12,
         linewidth=0,
     )
-    axes[1].plot(
+    ax2.plot(
         curve["c"],
         curve["prob"],
-        lw=1.6,
+        lw=1.45,
         color=line.get_color(),
     )
 
-for ax in axes:
+for ax in (ax1, ax2):
     ax.set_xlim(0, 2.8)
     ax.set_ylim(-0.03, 1.04)
     ax.set_xlabel(r"mean reversible degree $c$")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
 
-axes[0].set_ylabel(r"largest fraction $S$")
-axes[1].set_ylabel(r"$P(S>1/2)$")
-axes[0].legend(frameon=False, loc="lower right")
-axes[0].text(-0.12, 1.03, "(a)", transform=axes[0].transAxes, fontsize=10)
-axes[1].text(-0.12, 1.03, "(b)", transform=axes[1].transAxes, fontsize=10)
+ax1.set_ylabel(r"largest fraction $S$")
+ax2.set_ylabel(r"$P(S>1/2)$")
+ax1.legend(frameon=False, loc="lower right", handlelength=1.7)
+ax1.text(-0.20, 1.02, "(b)", transform=ax1.transAxes, fontsize=10)
+ax2.text(-0.20, 1.02, "(c)", transform=ax2.transAxes, fontsize=10)
 
-fig.subplots_adjust(left=0.095, right=0.99, bottom=0.21, top=0.92, wspace=0.28)
+fig.subplots_adjust(left=0.03, right=0.99, bottom=0.22, top=0.92, wspace=0.35)
 fig.savefig(OUT, bbox_inches="tight")
 plt.close(fig)
 
+print("schematic beta_c = 0.450")
 print("L, repeats:", SETTINGS)
 print(OUT)

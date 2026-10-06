@@ -139,12 +139,14 @@ S(\beta)
 \frac{C(\beta)}{2^L}.
 \label{eq:order-parameter}
 \end{equation}
-Figure~\ref{fig:percolation} shows the finite-size behavior for $L=6,8,10,12$. For each realization, edges are added in the order set by $\beta_{ij}$ and $S$ is measured as the threshold is increased. The ensemble-averaged component fraction becomes smoother with increasing system size, while the probability of a component containing more than half of genotype space becomes sharply localized near $c\simeq1.5$. The width of this probability transition decreases strongly over the dimensions shown. This is numerical evidence for a collective connectivity transition, but larger $L$ and finite-size scaling are required before identifying a limiting critical point.
+The local-to-global mechanism is already visible on a three-dimensional cube. Figure~\ref{fig:percolation}(a) uses a schematic landscape in which two four-genotype components are internally reversible below $\beta_c$, while all edges between them remain closed. At $\beta_c$, a single bridge edge becomes reversible and joins the two components, giving $S:1/2\to1$.
+
+Panels (b,c) show the corresponding finite-size behavior for random landscapes with $L=6,8,10,12$. For each realization, edges are added in the order set by $\beta_{ij}$ and $S$ is measured as the threshold is increased. The ensemble-averaged component fraction develops a progressively sharper rise, while the probability of a component containing more than half of genotype space becomes localized near $c\simeq1.5$. The width of this probability transition decreases strongly over the dimensions shown. This is numerical evidence for a collective connectivity transition, but larger $L$ and finite-size scaling are required before identifying a limiting critical point.
 
 \begin{figure}[htb!]
 \centering
 \includegraphics[width=\textwidth]{figures/fig2}
-\caption{Finite-size sharpening of the reversible-accessibility transition on random genotype cubes. Intrinsic fitness values are independent $\mathcal N(0,1)$ variables and $c=Lq(\beta)$ is the mean reversible degree from Eq.~\eqref{eq:mean-degree}. (a) Ensemble mean of the largest-component fraction $S$; bands show the standard error. (b) Probability that the largest reversible component contains more than half of genotype space. Curves correspond to increasing genotype dimension $L$.}
+\caption{From local edge opening to collective reversible accessibility. (a) Minimal three-bit example. Below $\beta_c$, the reversible graph consists of two four-genotype components, distinguished by filled and open nodes. Above $\beta_c$, one additional bridge edge becomes reversible and joins all eight genotypes into one component. (b,c) Random Gaussian landscapes with $c=Lq(\beta)$ from Eq.~\eqref{eq:mean-degree}. (b) Ensemble mean of the largest-component fraction $S$; bands show the standard error. (c) Probability that the largest reversible component contains more than half of genotype space. Curves correspond to increasing genotype dimension $L$.}
 \label{fig:percolation}
 \end{figure}
 
