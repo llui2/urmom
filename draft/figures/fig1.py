@@ -130,7 +130,8 @@ fig.legend(
     handlelength=2.0,
 )
 
-# Reserve a dedicated top band for the shared legend.\nfig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.72, wspace=0.24)
+# Reserve a dedicated top band for the shared legend.
+fig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.72, wspace=0.24)
 fig.savefig(OUT, bbox_inches="tight")
 plt.close(fig)
 
