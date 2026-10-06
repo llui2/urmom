@@ -1,22 +1,19 @@
 # Current draft
 
-A population evolves on an explicit genotype space. Mutation determines which nearby genotypes can appear, while the current population changes genotype fitness through
+A population evolves on an explicit genotype graph while population composition changes relative fitness through
 
-`f_i(p) = g_i + beta * (A p)_i`.
+\`f_i(p) = g_i + beta * (A p)_i\`.
 
-Here `A` is a **fitness-coupling matrix**: `A_ij` measures how genotype `j` changes the fitness of genotype `i`.
+For a resident genotype \`i\` and a rare neighboring mutant \`j\`, the local invasion condition defines a directed mutational edge. With distance-dependent coupling and \`Delta a = a_1 - a_0 > 0\`, both directions of an edge become accessible above
 
-For a resident `i` and a rare one-step mutant `j`, the selection step favors the mutant when
+\`beta_ij = |g_i - g_j| / Delta a\`.
 
-`g_j - g_i + beta * (A_ji - A_ii) > 0`.
+The current collective object is the reversible subgraph \`R_beta\`, containing edges accessible in both resident backgrounds. Its largest component gives a percolation-like order parameter on genotype space.
 
-The working problem is to determine how this frequency-dependent fitness correction changes mutational accessibility on a rugged intrinsic landscape.
+For independent Gaussian intrinsic fitnesses and \`Delta a = 1\`, an edge is reversible with probability
 
-The first setup keeps `A` low-dimensional, for example `A_ij = a[d_H(i,j)]`, and studies when coupling opens or closes routes from an intrinsic local peak. Diversity is an output, not an optimization target.
+\`q(beta) = erf(beta / 2)\`,
 
-The previous resource-competition draft is archived in `archive/history-dependent-recovery/`.
+so the mean reversible degree is \`c = L q\`. Incident edge states are correlated because their thresholds share genotype fitness values. The current numerical result is a finite-size sharpening of the largest reversible component for \`L = 6, 8, 10, 12\`.
 
-The local invasion conditions also define a resident-conditioned directed graph on genotype space. For nearest-neighbor coupling with $a_1>a_0$, the reverse direction of an edge $\{i,j\}$ opens at $\beta^{\mathrm{rev}}_{ij}=|g_i-g_j|/(a_1-a_0)$. These are local thresholds, but their effect on reachability is collective.
-
-In the current three-bit landscape, the largest strongly connected component grows from $1$ to $2$ to $4$ genotypes and then jumps to all $8$ at $\beta_c=0.5$. Just below the transition the components have sizes $4+2+2$; the single reverse direction opening on the $001$--$101$ edge is sufficient to merge them into one strongly connected genotype space. This local-to-global topological reorganization is the main mechanism to test beyond the illustrative cube.
-
+The manuscript is organized as **Literature** and **Results**. The previous resource-competition draft is archived in \`archive/history-dependent-recovery/\`.

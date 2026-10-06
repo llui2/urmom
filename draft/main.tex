@@ -12,173 +12,143 @@
 
 \begin{document}
 
-\title{Frequency-dependent fitness on genotype space}
+\title{Frequency-dependent accessibility on genotype space}
 \maketitle
 
-Fitness landscapes assign reproductive values to genotypes and thereby constrain which mutational paths are favored by selection \cite{weinreich2006,devisser2014}. Mutation and frequency-dependent selection have also been combined in replicator--mutator models \cite{page2002}. Recent experiments with bacteriophage $\lambda$ directly show that competitive context can change mutational effects and epistasis, deforming the measured fitness landscape during adaptation \cite{doud2024}. We consider a minimal discrete model in which mutation follows an explicit genotype graph while the current population changes relative fitness. The aim is to isolate how this feedback changes evolutionary accessibility.
+\section{Literature}
 
-\section{Model}
+Fitness landscapes assign a reproductive value to each genotype and orient mutational steps toward higher fitness. In the strong-selection, weak-mutation limit this leads to adaptive walks on a genotype graph, and the existence and number of fitness-increasing paths quantify evolutionary accessibility \cite{weinreich2006,devisser2014,franke2012,zagorski2016}. Percolation ideas have entered this problem in two related forms. Holey-landscape models study the emergence of connected viable regions in high-dimensional genotype spaces \cite{gavrilets1997}, while accessibility percolation studies the appearance of monotonic paths on random fitness landscapes as a control parameter or endpoint fitness is varied \cite{schmiegelt2023}. In both cases the landscape is fixed during the evolutionary process.
 
-Consider binary genotypes $x_i \in \{0,1\}^L$, with frequencies $p_i(t) \geq 0$ and $\sum_i p_i(t) = 1$. Mutation connects genotypes at Hamming distance one. We define $Q_{ji}$ as the probability that genotype $j$ produces genotype $i$ after mutation,
+Frequency-dependent selection removes this fixed ordering. Replicator--mutator models already allow genotype growth rates to depend on population composition \cite{page2002}, and recent experiments show that this dependence can be strong. In bacteriophage $\lambda$, competition changes mutational effects and epistasis across the measured landscape, opening evolutionary routes that are absent in a static description \cite{doud2024}. Measurements in \emph{Escherichia coli} likewise find frequency-dependent fitness effects across many pairwise competitions and report violations of a single transitive fitness ranking \cite{ascensao2025}. These results motivate an accessibility problem in which the direction of a mutational edge depends on the resident population.
+
+We consider the simplest version of this problem. A static landscape gives an acyclic orientation of genotype space, whereas frequency-dependent feedback can progressively make mutational edges accessible in both directions. The collective question is whether these locally opened edges join into a macroscopic mutually traversable region. This connects frequency-dependent evolution to a threshold-percolation problem on genotype space, with edge thresholds inherited from the underlying fitness landscape rather than assigned independently.
+
+\section{Results}
+
+\subsection{Local invasion defines the accessibility graph}
+
+Consider binary genotypes $x_i \in \{0,1\}^L$ with frequencies $p_i \geq 0$ and $\sum_i p_i = 1$. Mutations connect genotypes at Hamming distance one. Each genotype has intrinsic fitness $g_i$, while the current population changes its effective fitness according to
+\begin{equation}
+f_i(p)
+=
+g_i
++
+\beta \sum_k A_{ik} p_k,
+\label{eq:fitness}
+\end{equation}
+where $A_{ik}$ measures the effect of genotype $k$ on genotype $i$ and $\beta \geq 0$ controls the strength of the feedback.
+
+Let genotype $i$ be resident and let $j$ be a rare one-step mutant. At $p_i=1$, the mutant increases relative to the resident when
+\begin{equation}
+s_{ij}
+=
+g_j-g_i
++
+\beta (A_{ji}-A_{ii})
+>
+0.
+\label{eq:invasion}
+\end{equation}
+We therefore orient the mutational edge $i\to j$ whenever $s_{ij}>0$. Unlike a static fitness graph, this invasion graph combines comparisons made in different resident states.
+
+We first take the coupling to depend only on genetic distance,
+\begin{equation}
+A_{ij}
+=
+a_{d_H(x_i,x_j)}.
+\label{eq:radial-coupling}
+\end{equation}
+For neighboring genotypes, define $\Delta a=a_1-a_0$ and assume $\Delta a>0$. Equation~\eqref{eq:invasion} becomes
+\begin{equation}
+s_{ij}
+=
+g_j-g_i+\beta \Delta a.
+\end{equation}
+The direction toward larger intrinsic fitness is always accessible. The opposite direction becomes accessible when
+\begin{equation}
+\beta
+>
+\beta_{ij}
+=
+\frac{|g_i-g_j|}{\Delta a}.
+\label{eq:edge-threshold}
+\end{equation}
+Thus every mutational edge has a well-defined opening threshold. At $\beta=0$, and in the absence of fitness ties, the invasion graph reduces to the acyclic orientation generated by $g$. Increasing $\beta$ does not replace this orientation; it progressively adds the reverse directions.
+
+Let $R_\beta$ be the undirected subgraph containing only edges that are accessible in both resident backgrounds. Each connected component of $R_\beta$ is therefore a region that can be traversed in either direction through successive one-step invasions. The components of $R_\beta$ are contained in strongly connected components of the full invasion graph, but the two constructions need not coincide. We use $R_\beta$ because Eq.~\eqref{eq:edge-threshold} turns its growth into an explicit threshold-percolation problem.
+
+\subsection{Population dynamics realizes the local opening mechanism}
+
+To connect the invasion condition to a population trajectory, define $Q_{ji}$ as the probability that genotype $j$ produces genotype $i$ after mutation,
 \begin{equation}
 Q_{ji}
 =
 \begin{cases}
-1 - \mu, & i = j,\\[2pt]
-\mu/L, & d_H(x_i,x_j) = 1,\\[2pt]
+1-\mu, & i=j,\\[2pt]
+\mu/L, & d_H(x_i,x_j)=1,\\[2pt]
 0, & \text{otherwise}.
 \end{cases}
-\label{eq:mutation-matrix}
 \end{equation}
-
-Each genotype has an intrinsic fitness $g_i$. Its effective fitness at generation $t$ is
-\begin{equation}
-f_i(t)
-=
-g_i
-+
-\beta \sum_j A_{ij} p_j(t),
-\label{eq:fitness}
-\end{equation}
-where $A_{ij}$ measures how the frequency of genotype $j$ changes the fitness of genotype $i$. We therefore refer to $A$ as a fitness-coupling matrix.
-
-Selection and mutation are applied in one discrete update. Define the selection normalization
-\begin{equation}
-Z(t)
-=
-\sum_k p_k(t) \exp[\eta f_k(t)].
-\end{equation}
-The population then evolves according to
+Selection and mutation are applied in one discrete update,
 \begin{equation}
 p_i(t+1)
 =
 \sum_j
 Q_{ji}
 \frac{
-p_j(t) \exp[\eta f_j(t)]
+p_j(t)\exp[\eta f_j(p(t))]
 }{
-Z(t)
+\sum_k p_k(t)\exp[\eta f_k(p(t))]
 }.
 \label{eq:dynamics}
 \end{equation}
-The vector $g$ defines the intrinsic landscape, $Q$ defines the mutation geometry, and $A$ changes relative fitness as the population changes.
 
-When random landscapes are used, $g$ is drawn once per realization and kept fixed during Eq.~\eqref{eq:dynamics}. The original exploratory script used independent standard-normal entries and drew a new landscape between optimization runs, not during an evolutionary trajectory. The landscape is therefore quenched on the dynamical timescale. More generally, the distribution of $g$ can be chosen to control landscape correlations or ruggedness.
-
-\section{Relative fitness and local accessibility}
-
-Only fitness differences enter the selection step. For two genotypes $i$ and $k$,
-\begin{equation}
-f_i(t) - f_k(t)
-=
-g_i - g_k
-+
-\beta \sum_j
-(A_{ij} - A_{kj}) p_j(t).
-\label{eq:relative-fitness}
-\end{equation}
-The first term is fixed by the intrinsic landscape, while the second depends on population composition.
-
-Consider a population concentrated at genotype $i$ and a rare one-step mutant $j$. During selection, the mutant-to-resident ratio is multiplied by
-\begin{equation}
-\exp\left[
-\eta
-\left(
-g_j - g_i
-+
-\beta (A_{ji} - A_{ii})
-\right)
-\right].
-\end{equation}
-The mutant therefore increases relative to the resident when
-\begin{equation}
-g_j - g_i
-+
-\beta (A_{ji} - A_{ii})
->
-0.
-\label{eq:invasion}
-\end{equation}
-Equation~\eqref{eq:invasion} gives a local accessibility condition in the rare-mutant limit. Mutation creates the mutant through $Q$, while fitness coupling changes its selective effect after it appears. A step with $g_j < g_i$ can therefore become favorable in the population created by genotype $i$.
-
-The matrix $A$ contains a redundant component. Replacing
-\begin{equation}
-A
-\longrightarrow
-A + \mathbf{1} v^{\mathsf T}
-\end{equation}
-adds the same quantity $v^{\mathsf T}p$ to every genotype fitness and leaves Eq.~\eqref{eq:relative-fitness} unchanged. The dynamics therefore depends on differences between rows of $A$, not on all matrix entries independently.
-
-\section{Illustrative dynamics}
-
-Figure~\ref{fig:dynamics} shows one fixed three-bit landscape. Genotype $000$ is an intrinsic local peak, genotype $111$ is the global peak, and the coupling acts only between Hamming-distance-one genotypes. With $\beta = 0$, the intrinsically unfavorable intermediate $001$ remains at mutation-scale frequency. With $\beta = 0.4$, the initial condition in Eq.~\eqref{eq:invasion} favors $001$, which reaches finite frequency and changes the subsequent population trajectory. The figure is an illustration of the mechanism rather than a statistical statement about random landscapes.
+Figure~\ref{fig:dynamics} uses a three-bit landscape with $\Delta a=1$. Genotype $000$ is an intrinsic local peak and $111$ is the global peak. With $\beta=0$, the intermediate $001$ remains at mutation-scale frequency. With $\beta=0.4$, Eq.~\eqref{eq:edge-threshold} opens the step $000\to001$, which reaches finite frequency and changes the subsequent population trajectory. This example only illustrates the local mechanism; the collective transition is studied below over random landscapes.
 
 \begin{figure}[htb!]
 \centering
 \includegraphics[width=\textwidth]{figures/fig1}
-\caption{Illustrative trajectories of the discrete mutation--selection dynamics on a three-bit genotype space. The initial condition is $p_{000}(0)=1$. The intrinsic landscape satisfies $g_{000}=1.00$, $g_{001}=0.80$, $g_{011}=1.05$, and $g_{111}=1.30$, with $\mu=10^{-3}$ and $\eta=1.5$. The coupling is nearest-neighbor, with $a_0=0$, $a_1=1$, and $a_{d>1}=0$. (a) For $\beta=0$, genotype $001$ remains near mutation scale. (b) For $\beta=0.4$, the step $000\to001$ becomes locally favorable, transiently amplifying $001$ and changing the subsequent flow toward higher-fitness genotypes.}
+\caption{Frequency-dependent opening of a mutational step. The initial condition is $p_{000}(0)=1$, with $\mu=10^{-3}$ and $\eta=1.5$. The coupling acts between Hamming-distance-one genotypes with $a_0=0$ and $a_1=1$. (a) For $\beta=0$, genotype $001$ remains near mutation scale. (b) For $\beta=0.4$, the step $000\to001$ is favorable in the $000$ resident background, transiently amplifying $001$ and changing the later trajectory.}
 \label{fig:dynamics}
 \end{figure}
 
-\section{Minimal problem}
+\subsection{A collective connectivity transition}
 
-We first consider a rugged intrinsic landscape with a local peak and a higher peak elsewhere. Starting near the local peak, the baseline dynamics with $\beta = 0$ defines the mutational routes favored by the intrinsic landscape. We then introduce a low-dimensional family of fitness couplings and determine when Eq.~\eqref{eq:invasion} changes those routes.
-
-A simple first family is
+The edge thresholds in Eq.~\eqref{eq:edge-threshold} define a percolation-like ensemble once the intrinsic landscape is random. We take independent Gaussian fitness values $g_i\sim\mathcal N(0,1)$ and absorb $\Delta a$ into $\beta$. For a neighboring pair, $g_i-g_j\sim\mathcal N(0,2)$, so the probability that an edge belongs to $R_\beta$ is
 \begin{equation}
-A_{ij}
+q(\beta)
 =
-a_{d_H(x_i,x_j)},
-\label{eq:radial-coupling}
-\end{equation}
-where the coupling depends only on genetic distance. This keeps mutation and fitness coupling on the same genotype geometry and reduces the number of free coupling parameters from $O(4^L)$ to $O(L)$.
-
-For a monomorphic resident $i$ and a one-step mutant $j$, Eq.~\eqref{eq:invasion} becomes
-\begin{equation}
-g_j - g_i
-+
-\beta (a_1 - a_0)
->
-0.
-\end{equation}
-If $a_1 > a_0$, an intrinsically unfavorable edge becomes locally favorable above
-\begin{equation}
-\beta_{i\to j}
+P(|g_i-g_j|<\beta)
 =
-\frac{g_i-g_j}{a_1-a_0}.
-\label{eq:edge-threshold}
+\operatorname{erf}\left(\frac{\beta}{2}\right).
+\label{eq:edge-probability}
 \end{equation}
-The first quantities to measure are the set of locally favorable mutational edges, escape from intrinsic local peaks, the resulting population trajectory, and their dependence on $\beta$, landscape ruggedness, and the coefficients $a_d$. Diversity is treated as an outcome of the dynamics rather than an optimization objective.
-
-\section{Collective transition in the invasion graph}
-
-Equation~\eqref{eq:invasion} defines a directed invasion graph $G_\beta$ on the hypercube. Its vertices are genotypes, and a directed edge $i \to j$ is present when the rare mutant $j$ increases in a population concentrated at resident $i$. Each edge is therefore evaluated in a different resident state. The graph combines local invasion tests across population states rather than a simultaneous fitness ranking at one fixed composition.
-
-For the radial coupling in Eq.~\eqref{eq:radial-coupling}, let $\Delta a = a_1-a_0 > 0$. Along a mutational edge $\{i,j\}$, the direction toward the genotype with larger intrinsic fitness is present for every $\beta \geq 0$. The opposite direction appears when
+The hypercube has degree $L$, giving the mean reversible degree
 \begin{equation}
-\beta
->
-\beta^{\mathrm{rev}}_{ij}
+c(\beta)
 =
-\frac{|g_i-g_j|}{\Delta a}.
-\label{eq:reverse-threshold}
+L q(\beta).
+\label{eq:mean-degree}
 \end{equation}
-At $\beta=0$, and in the absence of fitness ties between neighboring genotypes, $G_0$ is an acyclic orientation of the hypercube and all strongly connected components are singletons. Increasing $\beta$ adds reverse directions through the local thresholds in Eq.~\eqref{eq:reverse-threshold}. The resulting change can be global because one new reverse direction can close several pre-existing directed paths and merge previously separate strongly connected components.
+This resembles bond percolation, but the edge states are not independent: two incident thresholds share the fitness of their common genotype. The random fitness landscape therefore induces a correlated bond process on the hypercube.
 
-For the three-bit landscape used in Fig.~\ref{fig:dynamics}, with $\Delta a=1$, this produces the transition in Fig.~\ref{fig:invasion-graph}. Immediately below $\beta_c=0.5$, the strongly connected components have sizes $4$, $2$, and $2$. Immediately above $\beta_c$, the reverse direction on the edge connecting $001$ and $101$ opens and the largest component jumps from four genotypes to all eight. The edge connecting $100$ and $110$ remains one-way until $\beta=0.51$, so the global transition does not require all local edges to become reversible.
+Let $C(\beta)$ denote the size of the largest connected component of $R_\beta$ and define
+\begin{equation}
+S(\beta)
+=
+\frac{C(\beta)}{2^L}.
+\label{eq:order-parameter}
+\end{equation}
+Figure~\ref{fig:percolation} shows the finite-size behavior for $L=6,8,10,12$. For each realization, edges are added in the order set by $\beta_{ij}$ and $S$ is measured as the threshold is increased. The ensemble-averaged component fraction becomes smoother with increasing system size, while the probability of a component containing more than half of genotype space becomes sharply localized near $c\simeq1.5$. The width of this probability transition decreases strongly over the dimensions shown. This is numerical evidence for a collective connectivity transition, but larger $L$ and finite-size scaling are required before identifying a limiting critical point.
 
 \begin{figure}[htb!]
 \centering
 \includegraphics[width=\textwidth]{figures/fig2}
-\caption{Collective accessibility transition on the three-bit genotype cube. Light edges remain one-way under the resident-conditioned invasion test, while dark edges are bidirectional; filled nodes belong to the largest strongly connected component. (a) Immediately below $\beta_c=0.5$, the largest component contains four genotypes. Immediately above $\beta_c$, one additional reverse direction on the $001$--$101$ edge, shown by the heaviest edge, makes all eight genotypes mutually reachable. (b) Size $S_{\max}$ of the largest strongly connected component as the coupling strength increases. Local edge reversals occur at separate thresholds, but $S_{\max}$ jumps from $4$ to $8$ at $\beta_c$.}
-\label{fig:invasion-graph}
+\caption{Finite-size sharpening of the reversible-accessibility transition on random genotype cubes. Intrinsic fitness values are independent $\mathcal N(0,1)$ variables and $c=Lq(\beta)$ is the mean reversible degree from Eq.~\eqref{eq:mean-degree}. (a) Ensemble mean of the largest-component fraction $S$; bands show the standard error. (b) Probability that the largest reversible component contains more than half of genotype space. Curves correspond to increasing genotype dimension $L$.}
+\label{fig:percolation}
 \end{figure}
 
-\section{Mathematical direction}
-
-For the distance-dependent family in Eq.~\eqref{eq:radial-coupling}, both mutation and fitness coupling respect the symmetries of the hypercube and can be represented in the Walsh basis. This gives a complementary description in which mutation and frequency-dependent fitness act on the same genotype-space modes.
-
-The local condition in Eq.~\eqref{eq:invasion} and the spectral representation address different scales of the same dynamics. The first describes how population feedback changes individual mutational steps near a resident state. The second can be used to determine how the same feedback changes relaxation or amplification of larger-scale variation across genotype space.
+The construction separates the local and collective parts of the mechanism. Frequency-dependent selection determines the edge threshold in Eq.~\eqref{eq:edge-threshold}; the genotype geometry then determines whether the opened edges remain isolated or join into a large traversable region. The next analytical problem is therefore the correlated percolation induced by shared genotype fitness values, rather than the existence of a single favorable path on a fixed landscape.
 
 \bibliographystyle{unsrtnat}
 \bibliography{refs}
